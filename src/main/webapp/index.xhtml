@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:form>
+
+            <table>
+                <tr>
+                    <td><h:outputText value="Enter Login ID: " /></td>
+                    <td><h:inputText id="username" 
+                                     value="#{authBean.username}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td><h:outputText value="Enter Password: " /></td>
+                    <td><h:inputSecret id="password" 
+                                       value="#{authBean.password}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td> </td>
+                    <td><h:commandButton value="Login" 
+                                         action="#{authBean.ValidateUser}"/>
+                        <h:commandButton value="Esplora" action="landingPage"/>
+                        <h:commandButton value="Iscriviti" action="subscriptionPage"/>
+                    </td>
+                </tr>
+            </table>
+
+        </h:form>
+        <h:form>
+                <h:commandButton value="Invia mail" action="#{mailerBean.SendMail('hipersimon@gmail.com', 'mail di prova', 'blah blach')}"/>
+            </h:form>
+    </h:body>
+</html>
+

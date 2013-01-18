@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:form>
+
+            <table>
+                <tr>
+                    <td><h:outputText value="Enter New Username: " /></td>
+                    <td><h:inputText id="username" 
+                                     value="#{subscriptionBean.username}" />
+                    </td>
+                </tr>
+                 <tr>
+                    <td><h:outputText value="Enter New Password: " /></td>
+                    <td><h:inputSecret id="password" 
+                                       value="#{subscriptionBean.password}" />
+                    </td>
+                </tr>
+                 <tr>
+                    <td><h:outputText value="Enter Mail: " /></td>
+                    <td><h:inputText id="mail" 
+                                     value="#{subscriptionBean.mail}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td><h:outputText value="Enter Address: " /></td>
+                    <td><h:inputText id="address" 
+                                     value="#{subscriptionBean.address}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td> </td>
+                    <td><h:commandButton value="Create User" 
+                                         action="#{subscriptionBean.Subscript}"/>
+                    </td>
+                </tr>
+            </table>
+
+        </h:form>
+    </h:body>
+</html>
+
