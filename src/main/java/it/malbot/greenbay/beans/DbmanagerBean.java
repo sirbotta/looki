@@ -76,7 +76,7 @@ public class DbmanagerBean implements Serializable {
 
     public User findUser(String username, String password) throws SQLException {
         PreparedStatement stm = con.prepareStatement(
-                "SELECT * FROM USERS WHERE USERNAME = ? AND PASSWORD = ?");
+                "SELECT * FROM USERS WHERE username = ? AND password = ?");
         try {
             stm.setString(1, username);
             stm.setString(2, password);
@@ -155,7 +155,7 @@ public class DbmanagerBean implements Serializable {
                 "SELECT AUCTIONS.*,CATEGORIES.name as category_name,USERS.username as username "
                 + "FROM AUCTIONS "
                 + "INNER JOIN CATEGORIES on AUCTIONS.category_id=CATEGORIES.id "
-                + "INNER JOIN users on AUCTIONS.user_id=USERS.id "
+                + "INNER JOIN USERS on AUCTIONS.user_id=USERS.id "
                 + "WHERE AUCTIONS.category_id = ?");
 
         stm.setInt(1, category_id);
@@ -201,8 +201,9 @@ public class DbmanagerBean implements Serializable {
                 "SELECT AUCTIONS.*,CATEGORIES.name as category_name,USERS.username as username "
                 + "FROM AUCTIONS "
                 + "INNER JOIN CATEGORIES on AUCTIONS.category_id=CATEGORIES.id "
-                + "INNER JOIN users on AUCTIONS.user_id=USERS.id "
-                + "WHERE LOWER(AUCTIONS.description) like ?");
+                + "INNER JOIN USERS on AUCTIONS.user_id=USERS.id "
+                + "WHERE LOWER(AUCTIONS.description) like ? "
+                + "ORDER BY AUCTIONS.due_date ASC");
 
         stm.setString(1, "%" + query.toLowerCase() + "%");
 
@@ -244,10 +245,52 @@ public class DbmanagerBean implements Serializable {
                 "SELECT AUCTIONS.*,CATEGORIES.name as category_name,USERS.username as username "
                 + "FROM AUCTIONS "
                 + "INNER JOIN CATEGORIES on AUCTIONS.category_id=CATEGORIES.id "
-                + "INNER JOIN users on AUCTIONS.user_id=USERS.id "
-                + "WHERE AUCTIONS.user_id = ?");
+                + "INNER JOIN USERS on AUCTIONS.user_id=USERS.id "
+                + "WHERE AUCTIONS.user_id = ? "
+                + "ORDER BY AUCTIONS.due_date ASC");
 
         stm.setInt(1, user_id);
+
+        try {
+            ResultSet rs = stm.executeQuery();
+            try {
+                while (rs.next()) {
+                    Auction a = new Auction();
+                    a.setId(rs.getInt("id"));
+                    a.setUser_id(rs.getInt("user_id"));
+                    a.setUsername(rs.getString("username"));
+                    a.setDescription(rs.getString("description"));
+                    a.setCategory_id(rs.getInt("category_id"));
+                    a.setCategory_name(rs.getString("category_name"));
+                    a.setInitial_price(rs.getDouble("initial_price"));
+                    a.setMin_increment(rs.getDouble("min_increment"));
+                    a.setActual_price(rs.getDouble("actual_price"));
+                    a.setWinner_id(rs.getInt("winner_id"));
+                    a.setClosed(rs.getBoolean("closed"));
+                    a.setUrl_image(rs.getString("url_image"));
+                    a.setDelivery_price(rs.getDouble("delivery_price"));
+                    a.setDue_date(rs.getTimestamp("due_date"));
+                    a.setInsertion_date(rs.getTimestamp("insertion_date"));
+
+                    auctionList.add(a);
+                }
+            } finally {
+                rs.close();
+            }
+        } finally {
+            stm.close();
+        }
+        return auctionList;
+    }
+    
+    public List<Auction> getOnDueAuction() throws SQLException {
+        List<Auction> auctionList = new ArrayList<Auction>();
+        PreparedStatement stm = con.prepareStatement(
+                "SELECT AUCTIONS.*,CATEGORIES.name as category_name,USERS.username as username "
+                + "FROM AUCTIONS "
+                + "INNER JOIN CATEGORIES on AUCTIONS.category_id=CATEGORIES.id "
+                + "INNER JOIN USERS on AUCTIONS.user_id=USERS.id "
+                + "ORDER BY AUCTIONS.due_date ASC");
 
         try {
             ResultSet rs = stm.executeQuery();
@@ -292,11 +335,12 @@ public class DbmanagerBean implements Serializable {
                 + "FROM AUCTIONS "
                 + "INNER JOIN CATEGORIES "
                 + "on AUCTIONS.category_id=CATEGORIES.id "
-                + "INNER JOIN users "
+                + "INNER JOIN USERS "
                 + "on AUCTIONS.user_id=USERS.id "
                 + "INNER JOIN "
-                + "(SELECT DISTINCT auction_id,user_id from AUCTIONS_BIDS where user_id = ?) as bidders "
-                + "on bidders.auction_id=auctions.id");
+                + "(SELECT DISTINCT auction_id,user_id from AUCTIONS_BIDS where user_id = ?) as BIDDERS "
+                + "on BIDDERS.auction_id=AUCTIONS.id "
+                + "ORDER BY AUCTIONS.due_date ASC");
 
         stm.setInt(1, user_id);
 
@@ -331,13 +375,43 @@ public class DbmanagerBean implements Serializable {
         }
         return auctionList;
     }
+    
+    public List<Auction_Bid> getAuctionBidByAuctionId(int auction_id) throws SQLException {
+        List<Auction_Bid> auctionBidList = new ArrayList<Auction_Bid>();
+        PreparedStatement stm = con.prepareStatement(
+                "SELECT * FROM AUCTIONS_BIDS WHERE auction_id = ? ORDER BY offer DESC");
+
+        stm.setInt(1, auction_id);
+
+        try {
+            ResultSet rs = stm.executeQuery();
+            try {
+                while (rs.next()) {
+                    Auction_Bid auction_bid = new Auction_Bid();
+
+                    auction_bid.setId(rs.getInt("id"));
+                    auction_bid.setAuction_id(rs.getInt("auction_id"));
+                    auction_bid.setUser_id(rs.getInt("user_id"));
+                    auction_bid.setBid_date(rs.getTimestamp("bid_date"));
+                    auction_bid.setOffer(rs.getDouble("offer"));
+
+                    auctionBidList.add(auction_bid);
+                }
+            } finally {
+                rs.close();
+            }
+        } finally {
+            stm.close();
+        }
+        return auctionBidList;
+    }
 
     public Auction findAuctionById(int auction_id) throws SQLException {
         PreparedStatement stm = con.prepareStatement(
                 "SELECT AUCTIONS.*,CATEGORIES.name as category_name,USERS.username as username "
                 + "FROM AUCTIONS "
                 + "INNER JOIN CATEGORIES on AUCTIONS.category_id=CATEGORIES.id "
-                + "INNER JOIN users on AUCTIONS.user_id=USERS.id "
+                + "INNER JOIN USERS on AUCTIONS.user_id=USERS.id "
                 + "WHERE AUCTIONS.category_id = ?");
         try {
             stm.setInt(1, auction_id);
@@ -376,7 +450,7 @@ public class DbmanagerBean implements Serializable {
 
     public int insertUser(User user) throws SQLException {
         PreparedStatement stm = con.prepareStatement(
-                "INSERT INTO USERS (username,password,address,mail,admin_role)"
+                "INSERT INTO USERS (username,password,address,mail,admin_role) "
                 + "VALUES (?,?,?,?,FALSE)");
 
         stm.setString(1, user.getUsername());
@@ -393,7 +467,7 @@ public class DbmanagerBean implements Serializable {
 
     public int insertBid(int user_id, int auction_id, double offer) throws SQLException {
         PreparedStatement stm = con.prepareStatement(
-                "INSERT INTO AUCTIONS_BIDS (auction_id,user_id,offer)"
+                "INSERT INTO AUCTIONS_BIDS (auction_id,user_id,offer) "
                 + "VALUES (?,?,?)");
 
         stm.setInt(1, auction_id);
@@ -426,7 +500,7 @@ public class DbmanagerBean implements Serializable {
     //trova la puntata massima
     public Auction_Bid findMaxAuctionBidByAuctionID(int auction_id) throws SQLException {
         PreparedStatement stm = con.prepareStatement(
-                "SELECT * FROM AUCTIONS_BIDS WHERE auction_id = ? ORDER BY OFFER DESC");
+                "SELECT * FROM AUCTIONS_BIDS WHERE auction_id = ? ORDER BY offer DESC");
 
         try {
             stm.setInt(1, auction_id);

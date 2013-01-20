@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Facelet Title</title>
     </h:head>
@@ -12,25 +13,35 @@
 
             <ui:define name="content">
                 <h2>Ricerca per #{searchBean.category_name} #{searchBean.query}</h2>
-                <ul>
-                    <ui:repeat value="#{searchBean.result}" var="a">
-                        <li>
+                <h:form>
+                    <p:dataGrid var="a" value="#{searchBean.result}" columns="3"
+                                rows="6" paginator="true"
+                                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                rowsPerPageTemplate="6,9,12,15" >
 
-                            <h:outputText value="#{a.id} "/>
-                            <h:outputText value="#{a.description} "/>
-                            <h:outputText value="#{a.due_date} "/>
-                            <h:outputText value="#{a.actual_price} "/>
-                            <h:outputText value="#{dbmanager.findUsernameById(a.winner_id)} "/>
-                            <h:outputText value="#{a.delivery_price} "/>
-                            <h:form>
-                                <h:commandLink action="auctionPage" value="visualizza">
-                                    <f:param name="auction_id" value="#{a.id}" />
+                        <p:panel header="Lotto N:#{a.id} - #{a.description}" style="text-align:center" >
+                            <h:panelGrid columns="1" style="width:100%" >
+                                <p:graphicImage height="100px" width="100px" value="./resources/img/#{a.url_image}"/> 
+                                <h:outputText  value="Scade il"/>
+                                <h:outputText class="timer" value="#{a.due_date}"/>
+                                <h:outputText value="Prezzo attuale #{a.actual_price} €"/>
+                                <h:outputText value="Venditore #{dbmanager.findUsernameById(a.user_id)}"/>
+                                <h:outputText value="Utente vincente #{dbmanager.findUsernameById(a.winner_id)}"/>
+                                <h:outputText value="Prezzo Spedizione #{a.delivery_price} €"/>
+
+                                <h:commandLink action="#{auctionBean.goToAuctionPage()}" value="visualizza">
+           
+                                    <f:setPropertyActionListener value="#{a}" 
+                                                                 target="#{auctionBean.auction}" /> 
                                 </h:commandLink>
-                            </h:form>
-                        </li>
-                    </ui:repeat>
-                </ul>
 
+
+
+                            </h:panelGrid>
+                        </p:panel>
+
+                    </p:dataGrid>
+                </h:form>
             </ui:define>
 
         </ui:composition>

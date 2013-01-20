@@ -140,8 +140,10 @@ public class searchBean implements Serializable {
         return "resultPage";
     }
 
-    public void latestResult() {
-        //TODO 
+    public void latestResult() throws SQLException {
+        query = null;
+        category_name = null;
+        setResult(dbmanager.getOnDueAuction());
     }
 
     public String goToMyAuctions() throws SQLException {

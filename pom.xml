@@ -13,8 +13,20 @@
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    
+    <repositories>
+        <repository>
+            <id>prime-repo</id>
+            <name>PrimeFaces Maven Repository</name>
+            <url>http://repository.primefaces.org</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+    
 
     <dependencies>
+        
+
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
@@ -54,6 +66,11 @@
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
             <version>2.1.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>3.4.2</version>
         </dependency>
     </dependencies>
 

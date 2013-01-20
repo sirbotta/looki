@@ -17,8 +17,6 @@
                 <h:outputText value="Aumenta ad #{auctionBean.min_increment}"/><br/>
                 <h:form>
                     <h:commandButton action="#{auctionBean.confirmBid()}" value="Conferma">
-                        <f:param name="auction_id" value="#{auctionBean.auction_id}" />
-                        <f:param name="bid_value" value="#{auctionBean.min_increment}" />
                     </h:commandButton>
                 </h:form>
             </ui:define> 
