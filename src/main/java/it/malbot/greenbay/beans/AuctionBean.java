@@ -5,58 +5,115 @@
 package it.malbot.greenbay.beans;
 
 import it.malbot.greenbay.model.Auction;
+import it.malbot.greenbay.model.Auction_Bid;
+import it.malbot.greenbay.model.User;
 import java.io.Serializable;
 import java.sql.SQLException;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.Conversation;
-import javax.enterprise.context.ConversationScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
-import javax.inject.Inject;
+import javax.faces.context.FacesContext;
 
 /**
  *
  * @author simone
  */
 @ManagedBean
-@ConversationScoped
-public class AuctionBean implements Serializable{
+@RequestScoped
+public class AuctionBean implements Serializable {
 
     /**
      * Creates a new instance of AuctionBean
      */
-    @Inject
-    private Conversation conversation;
+    //@Inject
+    //private Conversation conversation;
     @ManagedProperty(value = "#{dbmanager}")
     private DbmanagerBean dbmanager;
+    @ManagedProperty(value = "#{authBean}")
+    private AuthBean authBean;
     @ManagedProperty(value = "#{param.auction_id}")
-    private int auction_id; 
-    private double increment;
+    private int auction_id;
+    @ManagedProperty(value = "#{param.bid_value}")
+    private double bid_value;
+    private double min_increment;//incremento minimo attaccato alle pagine
     private Auction auction;
-    
-    
+
     @PostConstruct
-    public void init() throws SQLException
-    {
-        if (conversation.isTransient()) {
-            conversation.begin();
-        }
-        
-        if(auction==null){
-        auction=dbmanager.findAuctionById(auction_id);
-        }
-        
+    public void init() throws SQLException {
+        // if (conversation.isTransient()) {
+        //   conversation.begin();
+        //}
+
+        auction = dbmanager.findAuctionById(auction_id);
+        //genero il minimo
+        setMin_increment(roundToCent(auction.getMin_increment() + auction.getActual_price()));
+
     }
-    
-    public String makeABid(){
-        if(increment>auction.getMin_increment()){
-        auction.setActual_price(increment);
+
+    public String goToConfirmBid() {
+        //controllo che sia la bid sia superiore o uguale al minimo imposto
+        Double minimo = roundToCent(auction.getMin_increment() + auction.getActual_price());
+        if (min_increment >= minimo) {
+            return "confirmPage";
+        } else {
+            FacesMessage fm = new FacesMessage("Offerta troppo bassa");
+            FacesContext.getCurrentInstance().addMessage("Errore", fm);
+            return "picche";
+        }
+    }
+
+    public String confirmBid() throws SQLException {
+        User u = authBean.getUser();
+        Auction_Bid bestAuction_Bid;
+        //verifico la puntata maggiore
+        bestAuction_Bid = dbmanager.findMaxAuctionBidByAuctionID(auction_id);
+        //inserisco la puntata e controllo che ci sia in db
+        if (dbmanager.insertBid(u.getId(), auction_id, bid_value) != 0) {
+
+
+            ///se l'offerta è maggiore della best
+            if (bestAuction_Bid.getOffer() < bid_value) {
+
+                //aumento soltanto dell'incremento minimo
+                bid_value = roundToCent(auction.getMin_increment() + auction.getActual_price());
+
+
+                if (dbmanager.updateAuction(auction_id, u.getId(), bid_value) != 0) {
+                    auction.setWinner_id(u.getId());
+                    auction.setActual_price(bid_value);
+                    setMin_increment(roundToCent(auction.getMin_increment() + bid_value));
+                    return "auctionPage";
+                }
+            } else//altrimenti se è minore aggiorno con la best incrementata del min
+            {
+
+                //porto la offerta massima al bid_value+incremento
+                bid_value = bid_value + auction.getMin_increment();
+                //se la nuova bid_value è troppo alta rispetto all'offerta più alta
+                if (bid_value > bestAuction_Bid.getOffer()) {
+                    //utilizzo l'offerta più alta e ignoro l'incremento
+                    bid_value = bestAuction_Bid.getOffer();
+                }
+
+                if (dbmanager.updateAuction(auction_id, bestAuction_Bid.getUser_id(), bid_value) != 0) {
+                    auction.setWinner_id(bestAuction_Bid.getUser_id());
+                    auction.setActual_price(bid_value);
+                    setMin_increment(roundToCent(auction.getMin_increment() + bid_value));
+                    return "auctionPage";
+                }
+            }
+
+
         }
         
-        return "auctionPage";
+
+        FacesMessage fm = new FacesMessage("Qualcosa è andato storto, riprovare");
+        FacesContext.getCurrentInstance().addMessage("Errore", fm);
+
+        return "picche";
     }
-    
 
     /**
      * @param dbmanager the dbmanager to set
@@ -64,7 +121,6 @@ public class AuctionBean implements Serializable{
     public void setDbmanager(DbmanagerBean dbmanager) {
         this.dbmanager = dbmanager;
     }
-    
 
     /**
      * @return the auction_id
@@ -97,17 +153,44 @@ public class AuctionBean implements Serializable{
     /**
      * @return the increment
      */
-    public double getIncrement() {
-        return increment;
+    /**
+     * @param authBean the authBean to set
+     */
+    public void setAuthBean(AuthBean authBean) {
+        this.authBean = authBean;
     }
 
     /**
-     * @param increment the increment to set
+     * @return the bid_value
      */
-    public void setIncrement(double increment) {
-        this.increment = increment;
+    public double getBid_value() {
+        return bid_value;
+    }
+
+    /**
+     * @param bid_value the bid_value to set
+     */
+    public void setBid_value(double bid_value) {
+        this.bid_value = bid_value;
+    }
+
+    /**
+     * @return the min_increment
+     */
+    public double getMin_increment() {
+        return min_increment;
+    }
+
+    /**
+     * @param min_increment the min_increment to set
+     */
+    public void setMin_increment(double min_increment) {
+        this.min_increment = min_increment;
     }
     
-    
-    
+    //trimmare ai centesimi
+    private Double roundToCent(Double value)
+    {
+        return (double) Math.round(value * 100) / 100;
+    }
 }

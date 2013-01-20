@@ -7,9 +7,12 @@ package it.malbot.greenbay.beans;
 import it.malbot.greenbay.model.User;
 import java.io.Serializable;
 import java.sql.SQLException;
+import javax.faces.application.ConfigurableNavigationHandler;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -60,6 +63,8 @@ public class AuthBean implements Serializable {
         user = dbmanager.findUser(username, password);
         if (user == null) {
             password = null;
+            FacesMessage fm = new FacesMessage("Username o password errati");
+            FacesContext.getCurrentInstance().addMessage("Errore", fm);
             return "login";
         }
         if (user.isAdmin_role()) {
@@ -67,6 +72,14 @@ public class AuthBean implements Serializable {
         } else {
             return "landingPage";
         }
+    }
+
+    public String InvalidateUser() {
+        user = null;
+        password = null;
+        username = null;
+
+        return "login";
     }
 
     public String getUserGreatings() {
@@ -96,5 +109,32 @@ public class AuthBean implements Serializable {
      */
     public void setDbmanager(DbmanagerBean dbmanager) {
         this.dbmanager = dbmanager;
+    }
+    //fa redirect se l'utente non è un admin
+
+    public void isAdmin() {
+
+        if (user == null && user.isAdmin_role()) {
+            FacesContext fc = FacesContext.getCurrentInstance();
+            FacesMessage fm = new FacesMessage("Utente non amministratore");
+            FacesContext.getCurrentInstance().addMessage("Errore", fm);
+
+            ConfigurableNavigationHandler nav = (ConfigurableNavigationHandler) fc.getApplication().getNavigationHandler();
+
+            nav.performNavigation("login");
+        }
+    }
+    //fa redirect se l'utente non è loggato
+
+    public void isLogged() {
+
+        if (user == null) {
+            FacesContext fc = FacesContext.getCurrentInstance();
+            FacesMessage fm = new FacesMessage("Bisogna effettuare il login prima di eseguire l'azione");
+            FacesContext.getCurrentInstance().addMessage("Errore", fm);
+            ConfigurableNavigationHandler nav = (ConfigurableNavigationHandler) fc.getApplication().getNavigationHandler();
+
+            nav.performNavigation("login");
+        }
     }
 }

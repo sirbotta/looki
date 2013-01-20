@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="/template/common/commonLayout.xhtml">
+
+            <ui:define name="content">
+                <f:event listener="#{authBean.isLogged}" type="preRenderView" />
+
+                <h:dataTable value="#{searchBean.result}" var="a"
+                             styleClass="order-table"
+    			headerClass="order-table-header"
+    			rowClasses="order-table-odd-row,order-table-even-row">
+
+                    <h:column>
+                        <!-- column header -->
+                        <f:facet name="header">Descrizione</f:facet>
+                        <!-- row record -->
+                        #{a.description}
+                    </h:column>
+
+                    <h:column>
+                        <!-- column header -->
+                        <f:facet name="header">Scadenza</f:facet>
+                        <!-- row record -->
+                        <span class="timer">#{a.due_date}</span>
+                    </h:column>
+
+                    <h:column>
+                        <!-- column header -->
+                        <f:facet name="header">Prezzo attuale</f:facet>
+                        <!-- row record -->
+                        #{a.actual_price}
+                    </h:column>
+
+                    <h:column>
+                        <!-- column header -->
+                        <f:facet name="header">Vincitore attuale</f:facet>
+                        <!-- row record -->
+                        #{dbmanager.findUsernameById(a.winner_id)}
+                    </h:column>
+
+                    <h:column>
+                        <!-- column header -->
+                        <f:facet name="header">Prezzo spedizione</f:facet>
+                        <!-- row record -->
+                        #{a.delivery_price}
+                    </h:column>
+
+
+                    <h:column>
+                        <!-- column header -->
+                        <f:facet name="header">Visualizza</f:facet>
+                        <!-- row record -->
+                        <h:form>
+                            <h:commandLink action="auctionPage" value="visualizza">
+                                <f:param name="auction_id" value="#{a.id}" />
+                            </h:commandLink>
+                        </h:form>
+                    </h:column>
+
+
+                </h:dataTable>
+
+
+            </ui:define>
+
+        </ui:composition>
+    </h:body>
+</html>
+

@@ -10,14 +10,16 @@
     <h:body>
         <ui:composition template="/template/common/commonLayout.xhtml">
             <ui:define name="content">
-                <f:event type="preRenderComponent" listener="#{searchBean.end()}"/>
                 
                 <h:form>
                     <h:outputText value="Descrizione #{auctionBean.auction.description}"/><br/>
-                <h:outputText id="price" value="price  #{auctionBean.auction.actual_price}"/><br/>
-                <h:outputText value="Scade il #{auctionBean.auction.due_date}"/><br/>
-                <h:inputText id="increment" value="#{auctionBean.increment}"/>
-                <h:commandButton action="#{auctionBean.makeABid()}" value="Rilancia!">
+                <h:outputText id="price" value="Prezzo  #{auctionBean.auction.actual_price}"/><br/>
+                <h:outputText id="min_increment" value="Incremento min #{auctionBean.auction.min_increment}"/><br/>
+                Scade tra <span class="timer">#{auctionBean.auction.due_date}</span><br/>
+                <h:outputText value="Attualmente vince #{dbmanager.findUsernameById(auctionBean.auction.winner_id)}"/><br/>
+                <h:inputText id="increment" value="#{auctionBean.min_increment}"/>
+                <h:commandButton action="#{auctionBean.goToConfirmBid()}" value="Rilancia!">
+                    <f:param name="auction_id" value="#{auctionBean.auction_id}" />
                 </h:commandButton>
                 
                 </h:form>

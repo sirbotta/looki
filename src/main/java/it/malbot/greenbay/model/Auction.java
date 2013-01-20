@@ -13,7 +13,7 @@ import java.sql.Timestamp;
  */
 public class Auction implements Serializable{
     private int id;
-    private int user_id,category_id;
+    private int user_id,category_id,winner_id;
     private String description,url_image,username,category_name;
     private Double initial_price,min_increment,actual_price,delivery_price;
     private Timestamp due_date,insertion_date;
@@ -213,6 +213,20 @@ public class Auction implements Serializable{
      */
     public void setClosed(boolean closed) {
         this.closed = closed;
+    }
+
+    /**
+     * @return the winner_id
+     */
+    public int getWinner_id() {
+        return winner_id;
+    }
+
+    /**
+     * @param winner_id the winner_id to set
+     */
+    public void setWinner_id(int winner_id) {
+        this.winner_id = winner_id;
     }
     
 }

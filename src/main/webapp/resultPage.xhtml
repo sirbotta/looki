@@ -11,25 +11,22 @@
         <ui:composition template="/template/common/commonLayout.xhtml">
 
             <ui:define name="content">
-                #{authBean.userGreatings}
-                <h2>#{searchBean.category_id}</h2>
-                <h2>#{searchBean.category_name}</h2>
+                <h2>Ricerca per #{searchBean.category_name} #{searchBean.query}</h2>
                 <ul>
                     <ui:repeat value="#{searchBean.result}" var="a">
                         <li>
-                            
-                                <h:outputText value="#{a.id} "/>
-                                <h:outputText value="#{a.description} "/>
-                                <h:outputText value="#{a.due_date} "/>
-                                <h:outputText value="#{a.initial_price} "/>
-                                <h:outputText value="#{a.delivery_price} "/>
-                                <h:outputLink value="auctionPage.xhtml">
+
+                            <h:outputText value="#{a.id} "/>
+                            <h:outputText value="#{a.description} "/>
+                            <h:outputText value="#{a.due_date} "/>
+                            <h:outputText value="#{a.actual_price} "/>
+                            <h:outputText value="#{dbmanager.findUsernameById(a.winner_id)} "/>
+                            <h:outputText value="#{a.delivery_price} "/>
+                            <h:form>
+                                <h:commandLink action="auctionPage" value="visualizza">
                                     <f:param name="auction_id" value="#{a.id}" />
-                                    <f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>
-                                    <h:outputText value="Visualizza"/>
-                                </h:outputLink>
-                            
-                           
+                                </h:commandLink>
+                            </h:form>
                         </li>
                     </ui:repeat>
                 </ul>

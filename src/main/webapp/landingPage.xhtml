@@ -9,10 +9,31 @@
     </h:head>
     <h:body>
         <ui:composition template="/template/common/commonLayout.xhtml">
+
             <ui:define name="content">
                 #{authBean.userGreatings}
+                <h2>#{searchBean.category_name} #{searchBean.query}</h2>
+                <ul>
+                    <ui:repeat value="#{searchBean.result}" var="a">
+                        <li>
+
+                            <h:outputText value="#{a.id} "/>
+                            <h:outputText value="#{a.description} "/>
+                            <h:outputText value="#{a.due_date} "/>
+                            <h:outputText value="#{a.actual_price} "/>
+                            <h:outputText value="#{dbmanager.findUsernameById(a.winner_id)} "/>
+                            <h:outputText value="#{a.delivery_price} "/>
+                            <h:form>
+                                <h:commandLink action="auctionPage" value="visualizza">
+                                    <f:param name="auction_id" value="#{a.id}" />
+                                </h:commandLink>
+                            </h:form>
+                        </li>
+                    </ui:repeat>
+                </ul>
+
             </ui:define>
-            
+
         </ui:composition>
     </h:body>
 </html>

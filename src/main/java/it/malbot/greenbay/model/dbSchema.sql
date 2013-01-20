@@ -27,6 +27,7 @@ category_id INT NOT NULL,
 initial_price DOUBLE NOT NULL,
 min_increment DOUBLE NOT NULL,
 actual_price DOUBLE NOT NULL,
+winner_id int,
 closed BOOLEAN NOT NULL DEFAULT FALSE,
 url_image VARCHAR(255),
 delivery_price DOUBLE NOT NULL,
@@ -56,9 +57,10 @@ create table AUCTIONS_BIDS(
 id INT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1,
 INCREMENT BY 1),
 auction_id INT NOT NULL,
-seller_id INT NOT NULL,
+user_id INT NOT NULL,
 bid_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 offer DOUBLE NOT NULL,
 CONSTRAINT pk_auction_bid PRIMARY KEY (id),
-CONSTRAINT fk_auction_bid FOREIGN KEY (auction_id) REFERENCES AUCTIONS(id)
+CONSTRAINT fk_auction_bid FOREIGN KEY (auction_id) REFERENCES AUCTIONS(id),
+CONSTRAINT fk_user_bid FOREIGN KEY (user_id) REFERENCES USERS(id)
 );

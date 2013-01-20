@@ -5,18 +5,17 @@
 package it.malbot.greenbay.beans;
 
 import it.malbot.greenbay.model.Auction;
+import it.malbot.greenbay.model.Category;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.Conversation;
-import javax.enterprise.context.ConversationScoped;
-import javax.faces.bean.CustomScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
-import javax.inject.Inject;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -27,39 +26,41 @@ import javax.inject.Inject;
 //in distruzione <f:actionListener type="it.malbot.greenbay.helper.DestroyCustomScope" />
 @ManagedBean
 //@CustomScoped("#{CUSTOM_SCOPE}")
-@ConversationScoped
+//@ConversationScoped
+@SessionScoped
 public class searchBean implements Serializable {
 
     /**
      * Creates a new instance of searchBean
      */
-    @Inject
-    private Conversation conversation;
+    //@Inject
+    //private Conversation conversation;
     @ManagedProperty(value = "#{dbmanager}")
     private DbmanagerBean dbmanager;
-    @ManagedProperty(value = "#{param.category_id}")
+    @ManagedProperty(value = "#{authBean}")
+    private AuthBean authBean;
     private int category_id;
-    @ManagedProperty(value = "#{param.category_name}")
     private String category_name;
     private String query;
-    private List<Auction> result;
+    private List<Auction> result;//variabile in base alle query
+    private List<Category> categories;//fisso
 
-    
-    
     @PostConstruct
-    public void init()
-    {
-        if (conversation.isTransient()) {
-            conversation.begin();
-        }
-        
+    public void init() throws SQLException {
+        //if (conversation.isTransient()) {
+        //    conversation.begin();
+        //}
+        setCategories(dbmanager.getCategories());
+
+
     }
-    
-    public void end()
-    {
-        conversation.end();
-    }
-    
+
+    /*
+     public void end()
+     {
+     conversation.end();
+     }
+     */
     /**
      * @param dbmanager the dbmanager to set
      */
@@ -124,13 +125,68 @@ public class searchBean implements Serializable {
     }
 
     public String SubmitCategory() throws SQLException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Map<String, String> paramMap = context.getExternalContext().getRequestParameterMap();
+        category_id = Integer.parseInt(paramMap.get("category_id"));
+        category_name = paramMap.get("category_name");
+        query = null;
         setResult(dbmanager.getAuctionByCategory(getCategory_id()));
         return "resultPage";
     }
 
-    public String SubmitQuery() throws SQLException {  
+    public String SubmitQuery() throws SQLException {
+        category_name = null;
         setResult(dbmanager.getAuctionByQuery(getQuery()));
         return "resultPage";
     }
-    
+
+    public void latestResult() {
+        //TODO 
+    }
+
+    public String goToMyAuctions() throws SQLException {
+        if (authBean.getUser() != null) {
+            setResult(dbmanager.getAuctionByUserId(authBean.getUser().getId()));
+            return "myAuctionPage";
+        } else {
+            FacesMessage fm = new FacesMessage("Bisogna effettuare il login");
+            FacesContext.getCurrentInstance().addMessage("Errore", fm);
+            
+            return "login";
+        }
+        //TODO fillare il result
+        
+    }
+
+    public String goToMyBids() throws SQLException {
+        if (authBean.getUser() != null) {
+            setResult(dbmanager.getAuctionByBidderId(authBean.getUser().getId()));
+            return "myBidsPage";
+        } else {
+            FacesMessage fm = new FacesMessage("Bisogna effettuare il login");
+            FacesContext.getCurrentInstance().addMessage("Errore", fm);
+            return "login";
+        }
+    }
+
+    /**
+     * @return the categories
+     */
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    /**
+     * @param categories the categories to set
+     */
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    /**
+     * @param authBean the authBean to set
+     */
+    public void setAuthBean(AuthBean authBean) {
+        this.authBean = authBean;
+    }
 }
