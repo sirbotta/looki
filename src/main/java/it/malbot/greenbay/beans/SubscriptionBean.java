@@ -7,9 +7,9 @@ package it.malbot.greenbay.beans;
 import it.malbot.greenbay.model.User;
 import java.io.Serializable;
 import java.sql.SQLException;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.RequestScoped;
 import javax.mail.MessagingException;
 
 /**

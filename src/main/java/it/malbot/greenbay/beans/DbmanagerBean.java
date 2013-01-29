@@ -25,7 +25,7 @@ import javax.sql.DataSource;
  *
  * @author simone
  */
-@ManagedBean(name = "dbmanager")
+@ManagedBean(name = "dbmanager" , eager=true)
 @ApplicationScoped
 public class DbmanagerBean implements Serializable {
 
@@ -44,7 +44,7 @@ public class DbmanagerBean implements Serializable {
 
         //get database connection
         con = ds.getConnection();
-
+        
         if (con == null) {
             throw new SQLException("Can't get database connection");
         }
@@ -156,7 +156,8 @@ public class DbmanagerBean implements Serializable {
                 + "FROM AUCTIONS "
                 + "INNER JOIN CATEGORIES on AUCTIONS.category_id=CATEGORIES.id "
                 + "INNER JOIN USERS on AUCTIONS.user_id=USERS.id "
-                + "WHERE AUCTIONS.category_id = ?");
+                + "WHERE AUCTIONS.category_id = ? "
+                + "ORDER BY AUCTIONS.due_date ASC");
 
         stm.setInt(1, category_id);
 
@@ -474,6 +475,27 @@ public class DbmanagerBean implements Serializable {
         stm.setInt(2, user_id);
         stm.setDouble(3, offer);
 
+        try {
+            return stm.executeUpdate();
+        } finally {
+            stm.close();
+        }
+    }
+    
+     public int insertAuction(Auction auction) throws SQLException {
+        PreparedStatement stm = con.prepareStatement(
+                "INSERT INTO AUCTIONS (user_id,description,category_id,inital_price,min_increment,actual_price,url_image,delivery_price,due_date) "
+                + "VALUES (?,?,?,?,?,?,?,?,?)");
+
+        stm.setInt(1, auction.getUser_id());
+        stm.setString(2, auction.getDescription());
+        stm.setInt(3, auction.getCategory_id());
+        stm.setDouble(4,auction.getInitial_price());
+        stm.setDouble(5, auction.getMin_increment());
+        stm.setDouble(6, auction.getActual_price());
+        stm.setString(7, auction.getUrl_image());
+        stm.setDouble(8, auction.getDelivery_price());
+        stm.setTimestamp(9, auction.getDue_date());
         try {
             return stm.executeUpdate();
         } finally {

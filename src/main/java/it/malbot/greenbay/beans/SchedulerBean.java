@@ -25,7 +25,7 @@ import org.quartz.impl.StdSchedulerFactory;
  *
  * @author simone
  */
-@ManagedBean(name = "scheduler")
+@ManagedBean(name = "scheduler" , eager=true)
 @ApplicationScoped
 public class SchedulerBean implements Serializable{
 
@@ -83,4 +83,35 @@ public class SchedulerBean implements Serializable{
         // Schedule the job with the trigger 
         scheduler.scheduleJob(job, triggernow);
     }
+    
+    public void closeAuctionAt(Date due_date,int auction_id) throws SchedulerException {
+        
+        //recupero il servletContext
+        ServletContext servletContext = (ServletContext) FacesContext
+                .getCurrentInstance().getExternalContext().getContext();
+        //creo un wrapper da passare al job
+        JobDataMap jobDataMap = new JobDataMap();
+            jobDataMap.put("servletContext", servletContext);
+        
+        
+            
+        // Define job instance //per ora generato a caso solo su acution 1
+        JobDetail job = JobBuilder.newJob(CloseAuctionJob.class)
+                .withIdentity("closeAuction-"+auction_id, "group1")
+                .usingJobData("auction_id", auction_id)
+                .usingJobData(jobDataMap)
+                .build();
+        
+        
+        //trigger da usare correttamente in futuro
+        Trigger trigger = TriggerBuilder.newTrigger()
+                .withIdentity("trigger1", "group1")
+                .startAt(due_date)
+                .build();
+        
+
+        // Schedule the job with the trigger 
+        scheduler.scheduleJob(job, trigger);
+    }
+    
 }

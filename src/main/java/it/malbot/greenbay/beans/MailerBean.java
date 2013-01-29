@@ -9,7 +9,7 @@ import java.security.Security;
 import java.util.Date;
 import java.util.Properties;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -24,7 +24,7 @@ import javax.mail.internet.MimeMessage;
  *
  * @author simone
  */
-@ManagedBean(name = "mailer")
+@ManagedBean(name = "mailer" , eager=true)
 @ApplicationScoped
 public class MailerBean implements Serializable {
 
