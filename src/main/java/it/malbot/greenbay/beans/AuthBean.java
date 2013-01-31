@@ -65,7 +65,7 @@ public class AuthBean implements Serializable {
             password = null;
             FacesMessage fm = new FacesMessage("Username o password errati");
             FacesContext.getCurrentInstance().addMessage("Errore", fm);
-            return "login";
+            return "forceLoginPage";
         }
         if (user.isAdmin_role()) {
             return "adminPage";
@@ -121,7 +121,7 @@ public class AuthBean implements Serializable {
 
             ConfigurableNavigationHandler nav = (ConfigurableNavigationHandler) fc.getApplication().getNavigationHandler();
 
-            nav.performNavigation("login");
+            nav.performNavigation("forceLoginPage");
         }
     }
     //fa redirect se l'utente non è loggato
@@ -134,7 +134,7 @@ public class AuthBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage("Errore", fm);
             ConfigurableNavigationHandler nav = (ConfigurableNavigationHandler) fc.getApplication().getNavigationHandler();
 
-            nav.performNavigation("login");
+            nav.performNavigation("forceLoginPage");
         }
     }
 }

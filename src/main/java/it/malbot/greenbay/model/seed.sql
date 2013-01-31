@@ -7,7 +7,7 @@ INSERT INTO CATEGORIES (name,description) VALUES
 INSERT INTO USERS (username,password,address,mail,admin_role) VALUES 
 ('samuele','samuele','via delle seghe','samuele.malavasi@gmail.com',FALSE),
 ('simone','simone','via delle teglie','hipersimon@gmail.com',TRUE),
-('elettra','elettra','via delle pompe','blablah@gmail.com',FALSE);
+('elettra','elettra','via delle pompe','blablah@gmail.com',FALSE),
 ('nicola','nicola','via delle castagne','blebleh@gmail.com',FALSE);
 
 INSERT INTO AUCTIONS (USER_ID,DESCRIPTION,CATEGORY_ID,INITIAL_PRICE,MIN_INCREMENT,ACTUAL_PRICE,URL_IMAGE,DELIVERY_PRICE,DUE_DATE) VALUES

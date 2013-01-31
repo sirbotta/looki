@@ -24,6 +24,15 @@
     <listener>
         <listener-class>org.quartz.ee.servlet.QuartzInitializerListener</listener-class>
     </listener>
+    <!-- prime part-->
+    <filter>
+        <filter-name>PrimeFaces FileUpload Filter</filter-name>
+        <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>PrimeFaces FileUpload Filter</filter-name>
+        <servlet-name>Faces Servlet</servlet-name>
+    </filter-mapping>
     <!-- Faces part-->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
@@ -46,6 +55,7 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
+    
     <session-config>
         <session-timeout>
             30

@@ -42,7 +42,10 @@ public class searchBean implements Serializable {
     private int category_id;
     private String category_name;
     private String query;
-    private List<Auction> result;//variabile in base alle query
+    private List<Auction> result0;//variabile in base alle query
+    private List<Auction> result1;//variabile in base alle query
+    private List<Auction> result2;//variabile in base alle query
+    private List<Auction> result3;//variabile in base alle query
     private List<Category> categories;//fisso
 
     @PostConstruct
@@ -114,14 +117,14 @@ public class searchBean implements Serializable {
      * @return the result
      */
     public List<Auction> getResult() {
-        return result;
+        return result0;
     }
 
     /**
      * @param result the result to set
      */
     public void setResult(List<Auction> result) {
-        this.result = result;
+        this.result0 = result;
     }
 
     public String SubmitCategory() throws SQLException {
@@ -149,6 +152,10 @@ public class searchBean implements Serializable {
     public String goToMyAuctions() throws SQLException {
         if (authBean.getUser() != null) {
             setResult(dbmanager.getAuctionByUserId(authBean.getUser().getId()));
+            setResult1(dbmanager.getAuctionByUserIdWithBids(authBean.getUser().getId()));
+            setResult2(dbmanager.getAuctionByUserIdWithoutBids(authBean.getUser().getId()));
+            setResult3(dbmanager.getAuctionClosedByUserId(authBean.getUser().getId()));
+            
             return "myAuctionPage";
         } else {
             FacesMessage fm = new FacesMessage("Bisogna effettuare il login");
@@ -163,6 +170,10 @@ public class searchBean implements Serializable {
     public String goToMyBids() throws SQLException {
         if (authBean.getUser() != null) {
             setResult(dbmanager.getAuctionByBidderId(authBean.getUser().getId()));
+            setResult1(dbmanager.getAuctionByBidderIdWinner(authBean.getUser().getId()));
+            setResult2(dbmanager.getAuctionByBidderIdLoser(authBean.getUser().getId()));
+            setResult3(dbmanager.getAuctionClosedByBidderId(authBean.getUser().getId()));
+            
             return "myBidsPage";
         } else {
             FacesMessage fm = new FacesMessage("Bisogna effettuare il login");
@@ -190,5 +201,47 @@ public class searchBean implements Serializable {
      */
     public void setAuthBean(AuthBean authBean) {
         this.authBean = authBean;
+    }
+
+    /**
+     * @return the result1
+     */
+    public List<Auction> getResult1() {
+        return result1;
+    }
+
+    /**
+     * @param result1 the result1 to set
+     */
+    public void setResult1(List<Auction> result1) {
+        this.result1 = result1;
+    }
+
+    /**
+     * @return the result2
+     */
+    public List<Auction> getResult2() {
+        return result2;
+    }
+
+    /**
+     * @param result2 the result2 to set
+     */
+    public void setResult2(List<Auction> result2) {
+        this.result2 = result2;
+    }
+
+    /**
+     * @return the result3
+     */
+    public List<Auction> getResult3() {
+        return result3;
+    }
+
+    /**
+     * @param result3 the result3 to set
+     */
+    public void setResult3(List<Auction> result3) {
+        this.result3 = result3;
     }
 }

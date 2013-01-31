@@ -6,6 +6,7 @@ package it.malbot.greenbay.beans;
 
 import it.malbot.greenbay.model.Auction;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 import javax.faces.bean.ManagedBean;
@@ -35,11 +36,11 @@ public class InsertAuctionBean implements Serializable{
     final long minuteInMillis = 60L * 1000L;
     final long dayInMillis = 24L * 60L * 60L * 1000L;
     final long weekInMillis = 7L * 24L * 60L * 60L * 1000L;
-    private String description, url_image;
+    private String description, url_image="na.jpg";
     private double initial_price, min_increment, delivery_price;
     private Timestamp due_date;
 
-    public String submitNewAuction() throws SchedulerException, MessagingException {
+    public String submitNewAuction() throws SchedulerException, MessagingException, SQLException {
         //creato un'asta
         Auction a = new Auction();
         //setto i parametri
@@ -60,23 +61,22 @@ public class InsertAuctionBean implements Serializable{
             due_date = new Timestamp(new Date().getTime() + weekInMillis);
         }
         
-
         a.setDue_date(due_date);
         
-        //@TODO inserisco i dati a DB
+        //inserisco i dati a DB
         
+        int key=dbmanager.insertAuction(a);
+   
         //genero un date da un timestamp
         Date closeDate = new Date(due_date.getTime());
- 
-
-        //@TODO recupero auction_id
-        int auction_id = 1;// da creare il modo
-
         
+        
+        if(key!=0)
+        {
         
         //creo un job che chiuderà l'asta
         //@TODO job da scrivere correttamente
-        scheduler.closeAuctionAt(closeDate, auction_id);
+        scheduler.closeAuctionAt(closeDate, key);
 
         //mando una mail di conferma
         mailer.SendMail(authBean.getUser().getMail(),
@@ -84,8 +84,8 @@ public class InsertAuctionBean implements Serializable{
                 "L'asta " + description + " scadrà il"
                 + due_date.toString());
 
-
-
+        }
+        
         return "landingPage";
     }
    

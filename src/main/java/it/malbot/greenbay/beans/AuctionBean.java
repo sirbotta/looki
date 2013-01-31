@@ -9,12 +9,9 @@ import it.malbot.greenbay.model.Auction_Bid;
 import it.malbot.greenbay.model.User;
 import java.io.Serializable;
 import java.sql.SQLException;
-import java.util.Map;
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 

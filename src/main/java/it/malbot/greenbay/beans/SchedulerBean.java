@@ -6,26 +6,30 @@ package it.malbot.greenbay.beans;
 
 import it.malbot.greenbay.jobs.CloseAuctionJob;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
-import javax.enterprise.context.ApplicationScoped;
+import java.util.List;
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import org.quartz.JobBuilder;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
+import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.ee.servlet.QuartzInitializerListener;
 import org.quartz.impl.StdSchedulerFactory;
+import org.quartz.impl.matchers.GroupMatcher;
 
 /**
  *
  * @author simone
  */
-@ManagedBean(name = "scheduler" , eager=true)
+@ManagedBean(name = "scheduler" )//, eager=true)
 @ApplicationScoped
 public class SchedulerBean implements Serializable{
 
@@ -33,6 +37,7 @@ public class SchedulerBean implements Serializable{
      * Creates a new instance of SchedulerBean
      */
     private Scheduler scheduler;
+    private List<QuartzJob> quartzJobList = new ArrayList<QuartzJob>();
 
     public SchedulerBean() throws SchedulerException {
 
@@ -46,7 +51,7 @@ public class SchedulerBean implements Serializable{
         scheduler = stdSchedulerFactory.getScheduler();
 
     }
-
+    // deprecato usato solo in test
     public void closeAuctionAt() throws SchedulerException {
         
         //recupero il servletContext
@@ -105,7 +110,7 @@ public class SchedulerBean implements Serializable{
         
         //trigger da usare correttamente in futuro
         Trigger trigger = TriggerBuilder.newTrigger()
-                .withIdentity("trigger1", "group1")
+                .withIdentity("trigger-"+auction_id, "group1")
                 .startAt(due_date)
                 .build();
         
@@ -113,5 +118,91 @@ public class SchedulerBean implements Serializable{
         // Schedule the job with the trigger 
         scheduler.scheduleJob(job, trigger);
     }
+    
+    
+    
+    ////// parte sperimentale
+    
+    public void fill_list() throws SchedulerException{
+            quartzJobList.clear();
+ 
+	  // loop jobs by group
+	  for (String groupName : scheduler.getJobGroupNames()) {
+ 
+		// get jobkey
+		for (JobKey jobKey : scheduler.getJobKeys(GroupMatcher
+			.jobGroupEquals(groupName))) {
+ 
+			String jobName = jobKey.getName();
+			String jobGroup = jobKey.getGroup();
+ 
+			// get job's trigger
+			List<Trigger> triggers = (List<Trigger>) scheduler
+				.getTriggersOfJob(jobKey);
+			Date nextFireTime = triggers.get(0).getNextFireTime();
+ 
+			getQuartzJobList().add(new QuartzJob(jobName, jobGroup, nextFireTime));
+ 
+		}
+ 
+	  }
+    }
+
+    /**
+     * @return the quartzJobList
+     */
+    public List<QuartzJob> getQuartzJobList() {
+        return quartzJobList;
+    }
+
+    /**
+     * @param quartzJobList the quartzJobList to set
+     */
+    public void setQuartzJobList(List<QuartzJob> quartzJobList) {
+        this.quartzJobList = quartzJobList;
+    }
+    
+    
+    public static class QuartzJob {
+ 
+		private static final long serialVersionUID = 1L;
+ 
+		String jobName;
+		String jobGroup;
+		Date nextFireTime;
+ 
+		public QuartzJob(String jobName, String jobGroup, Date nextFireTime) {
+ 
+			this.jobName = jobName;
+			this.jobGroup = jobGroup;
+			this.nextFireTime = nextFireTime;
+		}
+ 
+		public String getJobName() {
+			return jobName;
+		}
+ 
+		public void setJobName(String jobName) {
+			this.jobName = jobName;
+		}
+ 
+		public String getJobGroup() {
+			return jobGroup;
+		}
+ 
+		public void setJobGroup(String jobGroup) {
+			this.jobGroup = jobGroup;
+		}
+ 
+		public Date getNextFireTime() {
+			return nextFireTime;
+		}
+ 
+		public void setNextFireTime(Date nextFireTime) {
+			this.nextFireTime = nextFireTime;
+		}
+ 
+	}
+ 
     
 }

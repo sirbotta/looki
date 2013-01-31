@@ -117,7 +117,7 @@ public class SubscriptionBean implements Serializable{
             "Benvenuto "+u.getUsername()+" in Green bay ";
         if(dbmanager.insertUser(u)!=0){
             mailer.SendMail(u.getMail(), "Registrazione GREENbay", welcome_message);
-            return "login";
+            return "forceLoginPage";
         }
         else
         {

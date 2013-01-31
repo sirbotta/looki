@@ -24,7 +24,7 @@ import javax.mail.internet.MimeMessage;
  *
  * @author simone
  */
-@ManagedBean(name = "mailer" , eager=true)
+@ManagedBean(name = "mailer" )//, eager=true)
 @ApplicationScoped
 public class MailerBean implements Serializable {
 
@@ -35,7 +35,7 @@ public class MailerBean implements Serializable {
     private String username;
     private String password;
 
-    @PostConstruct
+    //@PostConstruct
     public void connect() {
         username = "greenbay.noreply@gmail.com";
         password = "greenbay2013";
@@ -59,6 +59,7 @@ public class MailerBean implements Serializable {
     }
 
     public void SendMail(String recipient, String subject, String text) throws MessagingException {
+        connect();
         // — Create a new message –
         Message msg = new MimeMessage(session);
         // — Set the FROM and TO fields –
