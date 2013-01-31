@@ -59,6 +59,7 @@ public class MailerBean implements Serializable {
     }
 
     public void SendMail(String recipient, String subject, String text) throws MessagingException {
+        
         connect();
         // — Create a new message –
         Message msg = new MimeMessage(session);
