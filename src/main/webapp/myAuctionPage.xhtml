@@ -2,109 +2,126 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>Facelet Title</title>
+        <title>Login</title> 
+        <link rel="stylesheet" type="text/css" href="./resources/css/style.css"/>
     </h:head>
     <h:body>
-        <ui:composition template="/template/common/commonLayout.xhtml">
+        <div id="header">
+            <ui:insert name="img" >
+                <ui:include src="/template/common/headerImg.xhtml">
+                </ui:include>
+            </ui:insert>
+            <ui:insert name="menu" >
+                <ui:include src="/template/common/menu.xhtml">
+                </ui:include>
+            </ui:insert>
+        </div>
+        <div id="content">
+            <div id="left-container">
+                <div class="left-box" >
+                    <ui:insert name="submitAuction" >
+                        <ui:include src="/template/common/submitAuction.xhtml">
+                        </ui:include>
+                    </ui:insert>
+                </div>
+            </div>
+            <div id="right-container">
+                <div class="right-box">
+                    <f:event listener="#{authBean.isLogged}" type="preRenderView" />
+                    <p:tabView id="tabView">
 
-            <ui:define name="content">
-                <f:event listener="#{authBean.isLogged}" type="preRenderView" />
-                <p:tabView id="tabView">
+                        <p:tab id="tab1" title="Tutte le mie Aste">
+                            <h:form>
 
-                    <p:tab id="tab1" title="Tutte le mie Aste">
-                        <h:form>
-
-                            <p:dataTable id="dataTable" var="a" value="#{searchBean.result}"
-                                         paginator="true" rows="10"
-                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                         rowsPerPageTemplate="5,10,15">
-                                <f:facet name="header">
-                                    Le mie Offerte
-                                </f:facet>
-
-                                <p:column>
+                                <p:dataTable id="dataTable" var="a" value="#{searchBean.result}"
+                                             paginator="true" rows="10"
+                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15">
                                     <f:facet name="header">
-                                        <h:outputText value="Descrizione" />
+                                        Le mie Offerte
                                     </f:facet>
-                                    <h:outputText value="#{a.description}" />
-                                </p:column>
 
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="Scadenza" />
-                                    </f:facet>
-                                    <h:outputText class="timer" value="#{a.due_date}" />
-                                </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Descrizione" />
+                                        </f:facet>
+                                        <h:outputText value="#{a.description}" />
+                                    </p:column>
 
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="Prezzo iniziale" />
-                                    </f:facet>
-                                    <h:outputText value="#{a.initial_price}"  />
-                                </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Scadenza" />
+                                        </f:facet>
+                                        <h:outputText class="timer" value="#{a.due_date}" />
+                                    </p:column>
 
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="Prezzo attuale" />
-                                    </f:facet>
-                                    <h:outputText value="#{a.actual_price}" />
-                                </p:column>
-                                
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="Incremento Minimo" />
-                                    </f:facet>
-                                    <h:outputText value="#{a.min_increment}" />
-                                </p:column>
-                                
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="Vincitore attuale" />
-                                    </f:facet>
-                                    <h:outputText value="#{dbmanager.findUsernameById(a.winner_id)}" />
-                                </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Prezzo iniziale" />
+                                        </f:facet>
+                                        <h:outputText value="#{a.initial_price}"  />
+                                    </p:column>
 
-                                
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Prezzo attuale" />
+                                        </f:facet>
+                                        <h:outputText value="#{a.actual_price}" />
+                                    </p:column>
 
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="Visualizza Storico " />
-                                    </f:facet>
-                                    <h:commandLink action="auctionPageStory" value="visualizza">
-                                        <!--
-                                        <f:setPropertyActionListener value="#{a}" 
-                                                                     target="#{auctionBean.auction}" /> 
-                                        -->
-                                    </h:commandLink>
-                                </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Incremento Minimo" />
+                                        </f:facet>
+                                        <h:outputText value="#{a.min_increment}" />
+                                    </p:column>
 
-                            </p:dataTable>
-
-                        </h:form>
-                    </p:tab>
-
-                    <p:tab id="tab2" title="Le mie aste con puntate">
-
-                    </p:tab>
-
-                    <p:tab id="tab3" title="Le mie aste senza puntate">
-
-                    </p:tab>
-
-                    <p:tab id="tab4" title="Le mie aste concluse">
-
-                    </p:tab>
-
-                </p:tabView>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Vincitore attuale" />
+                                        </f:facet>
+                                        <h:outputText value="#{dbmanager.findUsernameById(a.winner_id)}" />
+                                    </p:column>
 
 
-            </ui:define>
 
-        </ui:composition>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Visualizza Storico " />
+                                        </f:facet>
+                                        <h:commandLink action="auctionPageStory" value="visualizza">
+                                            <!--
+                                            <f:setPropertyActionListener value="#{a}" 
+                                                                         target="#{auctionBean.auction}" /> 
+                                            -->
+                                        </h:commandLink>
+                                    </p:column>
+
+                                </p:dataTable>
+
+                            </h:form>
+                        </p:tab>
+
+                        <p:tab id="tab2" title="Le mie aste con puntate">
+
+                        </p:tab>
+
+                        <p:tab id="tab3" title="Le mie aste senza puntate">
+
+                        </p:tab>
+
+                        <p:tab id="tab4" title="Le mie aste concluse">
+
+                        </p:tab>
+
+                    </p:tabView>
+                </div>
+            </div>
+        </div>
     </h:body>
 </html>
 

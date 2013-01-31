@@ -24,7 +24,7 @@ import javax.mail.internet.MimeMessage;
  *
  * @author simone
  */
-@ManagedBean(name = "mailer" , eager=true)
+@ManagedBean(name = "mailer")
 @ApplicationScoped
 public class MailerBean implements Serializable {
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <body>        
+        <ui:composition>
+            <h:form>
+                <p:menubar>  
+                    <p:menuitem ajax="false" value="Home" action="landingPage" />  
+                    <p:menuitem ajax="false" value="Le mie aste" action="#{searchBean.goToMyAuctions()}" />  
+                    <p:menuitem ajax="false" value="Le mie puntate" action="#{searchBean.goToMyBids()}" />   
+                    <p:menuitem ajax="false" value="Login" action="forceLoginPage" />
+                    <p:menuitem ajax="false" value="Logout" action="#{authBean.InvalidateUser()}" />
+                </p:menubar> 
+            </h:form>
+        </ui:composition>
+    </body>
+</html>

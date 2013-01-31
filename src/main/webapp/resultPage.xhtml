@@ -6,47 +6,65 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>Facelet Title</title>
+        <title>Login</title> 
+        <link rel="stylesheet" type="text/css" href="./resources/css/style.css"/>
     </h:head>
     <h:body>
-        <ui:composition template="/template/common/commonLayout.xhtml">
+        <div id="header">
+            <ui:insert name="img" >
+                <ui:include src="/template/common/headerImg.xhtml">
+                </ui:include>
+            </ui:insert>
+            <ui:insert name="menu" >
+                <ui:include src="/template/common/menu.xhtml">
+                </ui:include>
+            </ui:insert>
+        </div>
+        <div id="content">
+            <div id="left-container">
+                <div class="left-box" >
+                    <ui:insert name="categories-list" >
+                        <ui:include src="/template/common/categoriesList.xhtml">
+                        </ui:include>
+                    </ui:insert>
+                </div>
+            </div>
+            <div id="right-container">
+                <div class="right-box">
+                    <h:form>
+                        <p:dataGrid var="a" value="#{searchBean.result}" columns="5"
+                                    rows="10" paginator="false"
+                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    rowsPerPageTemplate="6,9,12,15" >
 
-            <ui:define name="content">
-                <h2>Ricerca per #{searchBean.category_name} #{searchBean.query}</h2>
-                <h:form>
-                    <p:dataGrid var="a" value="#{searchBean.result}" columns="3"
-                                rows="6" paginator="true"
-                                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                rowsPerPageTemplate="6,9,12,15" >
+                            <p:panel header="Lotto N:#{a.id} - #{a.description}" style="text-align:center" >
+                                <h:panelGrid columns="1" style="width:100%" >
+                                    <p:graphicImage height="100px" width="100px" value="./resources/img/#{a.url_image}"/> 
+                                    <h:outputText  value="Scade il"/>
+                                    <h:outputText  value="#{a.due_date}"/>
+                                    <h:outputText value="Prezzo attuale #{a.actual_price} €"/>
+                                    <h:outputText value="Venditore #{dbmanager.findUsernameById(a.user_id)}"/>
+                                    <h:outputText value="Utente vincente #{dbmanager.findUsernameById(a.winner_id)}"/>
+                                    <h:outputText value="Prezzo Spedizione #{a.delivery_price} €"/>
 
-                        <p:panel header="Lotto N:#{a.id} - #{a.description}" style="text-align:center" >
-                            <h:panelGrid columns="1" style="width:100%" >
-                                <p:graphicImage height="100px" width="100px" value="./resources/img/#{a.url_image}"/> 
-                                <h:outputText  value="Scade il"/>
-                                <h:outputText class="timer" value="#{a.due_date}"/>
-                                <h:outputText value="Prezzo attuale #{a.actual_price} €"/>
-                                <h:outputText value="Venditore #{dbmanager.findUsernameById(a.user_id)}"/>
-                                <h:outputText value="Utente vincente #{dbmanager.findUsernameById(a.winner_id)}"/>
-                                <h:outputText value="Prezzo Spedizione #{a.delivery_price} €"/>
+                                    <h:commandLink action="#{auctionBean.goToAuctionPage()}" value="visualizza">
 
-                                <h:commandLink action="#{auctionBean.goToAuctionPage()}" value="visualizza">
-           
-                                    <f:setPropertyActionListener value="#{a}" 
-                                                                 target="#{auctionBean.auction}" /> 
-                                </h:commandLink>
+                                        <f:setPropertyActionListener value="#{a}" 
+                                                                     target="#{auctionBean.auction}" /> 
+                                    </h:commandLink>
 
 
 
-                            </h:panelGrid>
-                        </p:panel>
+                                </h:panelGrid>
+                            </p:panel>
 
-                    </p:dataGrid>
-                </h:form>
-            </ui:define>
+                        </p:dataGrid>
+                    </h:form>
+                    <h6>Ricerca per #{searchBean.category_name} #{searchBean.query}</h6>
+                </div>
 
-        </ui:composition>
-
-
+            </div>
+        </div>
     </h:body>
 </html>
 

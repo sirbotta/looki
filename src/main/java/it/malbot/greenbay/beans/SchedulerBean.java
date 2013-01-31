@@ -7,7 +7,7 @@ package it.malbot.greenbay.beans;
 import it.malbot.greenbay.jobs.CloseAuctionJob;
 import java.io.Serializable;
 import java.util.Date;
-import javax.enterprise.context.ApplicationScoped;
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
@@ -25,7 +25,7 @@ import org.quartz.impl.StdSchedulerFactory;
  *
  * @author simone
  */
-@ManagedBean(name = "scheduler" , eager=true)
+@ManagedBean(name = "scheduler")
 @ApplicationScoped
 public class SchedulerBean implements Serializable{
 

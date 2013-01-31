@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <body>        
+        <ui:composition>
+            <h:form id="login">
+                <p:panelGrid columns="2">  
+                    <h:outputLabel for="username" value="Username "/>  
+                    <p:inputText id="username" value="#{subscriptionBean.username}" required="true" label="Username" />  
+                    
+                    <h:outputLabel for="password" value="Password "  />  
+                    <p:password value="#{subscriptionBean.password}" id="password" required="true" label="Password">
+                        <f:validator validatorId="passwordValidator"/>
+                        <f:attribute name="confirmPassword" value="#{confirmPassword}"/>
+                    </p:password>
+                    
+                    <h:outputLabel for="cnfPwd" value="Confirm Password "  />  
+                    <p:password id="cnfPwd" required="true"
+                                   binding="#{confirmPassword}"
+                                   requiredMessage="Please enter confirm password" />
+                    
+                    <h:outputLabel for="email" value="Email"  />  
+                    <p:inputText value="#{subscriptionBean.mail}" id="email" required="true" label="Email">
+                        <f:validator validatorId="emailValidator"/>
+                        <f:attribute name="confirmEmail" value="#{confirmEmail}"/>
+                    </p:inputText>
+                    
+                    <h:outputLabel for="cnfEmail" value="Confirm Password "  />  
+                    <p:inputText id="cnfEmail" required="true"
+                                   binding="#{confirmEmail}"
+                                   requiredMessage="Please enter confirm email" />
+                    
+                    <h:outputLabel for="address" value="Username " />  
+                    <p:inputText id="address" value="#{subscriptionBean.address}" required="true" label="Username" /> 
+
+                
+
+                    <f:facet name="footer"> 
+                        <p:commandButton ajax="false" value="Confirm" action="#{subscriptionBean.Subscript}"/>  
+                    </f:facet>  
+                </p:panelGrid>
+            </h:form>
+        </ui:composition>
+    </body>
+</html>
