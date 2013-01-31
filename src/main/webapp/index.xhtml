@@ -2,40 +2,39 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>Facelet Title</title>
+        <title>Login</title> 
+        <link rel="stylesheet" type="text/css" href="./resources/css/style.css"/>
     </h:head>
     <h:body>
-        <h:form>
-
-            <table>
-                <tr>
-                    <td><h:outputText value="Enter Login ID: " /></td>
-                    <td><h:inputText id="username" 
-                                     value="#{authBean.username}" />
-                    </td>
-                </tr>
-                <tr>
-                    <td><h:outputText value="Enter Password: " /></td>
-                    <td><h:inputSecret id="password" 
-                                       value="#{authBean.password}" />
-                    </td>
-                </tr>
-                <tr>
-                    <td> </td>
-                    <td><h:commandButton value="Login" 
-                                         action="#{authBean.ValidateUser}"/>
-                        <h:commandButton value="Esplora" action="landingPage"/>
-                        <h:commandButton value="Iscriviti" action="subscriptionPage"/>
-                         <h:commandButton value="scheduleradmin" action="schedulerAdminPage"/>
-                        <h:commandButton value="test scheduler" action="#{scheduler.closeAuctionAt()}" />
-                    </td>
-                </tr>
-            </table>
-
-        </h:form>
-       
+        <f:event listener="#{searchBean.latestResult()}" type="preRenderView" />
+        <div id="header">
+            <ui:insert name="header" >
+                <ui:include src="/template/common/headerImg.xhtml">
+                </ui:include>
+            </ui:insert>
+        </div>
+        <div id="content">
+            <div id="left-container">
+                <div class="left-box" >
+                    <ui:insert name="login" >
+                        <ui:include src="/template/common/login.xhtml">
+                        </ui:include>
+                    </ui:insert>
+                </div>
+            </div>
+            <div id="right-container">
+                <div class="right-box">
+                    <ui:insert name="result-datagrid" >
+                        <ui:include src="/template/common/resultDatagridNoPaginator.xhtml">
+                        </ui:include>
+                    </ui:insert>
+                </div>
+            </div>
+        </div>
     </h:body>
 </html>
 

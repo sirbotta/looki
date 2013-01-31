@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <body>        
+        <ui:composition>
+            <h:form id="login">
+            <p:panelGrid columns="2">  
+                <h:outputLabel for="username" value="Username " />  
+                <p:inputText id="username" value="#{authBean.username}" required="true" label="Username" />  
+
+                <h:outputLabel for="password" value="Password " />  
+                <p:password value="#{authBean.password}" id="password" required="true" label="Password"/>
+
+                <f:facet name="footer"> 
+                    <p:commandButton ajax="false" value="Login" action="#{authBean.ValidateUser}"/>  
+                    <p:commandButton ajax="false" value="Esplora" immediate="true" action="landingPage"/>  
+                    <p:commandButton ajax="false" value="Subscribe" action="subscriptionPage" immediate="true"/>  
+                </f:facet>  
+            </p:panelGrid>
+             </h:form>
+        </ui:composition>
+    </body>
+</html>

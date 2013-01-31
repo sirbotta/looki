@@ -1,47 +1,42 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:head>
-        <title>Facelet Title</title>
+        <title>Login</title> 
+        <link rel="stylesheet" type="text/css" href="./resources/css/style.css"/>
     </h:head>
     <h:body>
-        <h:form>
+        <f:event listener="#{searchBean.latestResult()}" type="preRenderView" />
+        <div id="header">
+            <ui:insert name="header" >
+                <ui:include src="/template/common/headerImg.xhtml">
+                </ui:include>
+            </ui:insert>
+        </div>
+        <div id="content">
+            <div id="left-container">
+                <div class="left-box" >
+                    <ui:insert name="login" >
+                        <ui:include src="/template/common/subscription.xhtml">
+                        </ui:include>
+                    </ui:insert>
+                </div>
+            </div>
+            <div id="right-container">
+                <div class="right-box">
+                    <ui:insert name="result-datagrid" >
+                        <ui:include src="/template/common/resultDatagridNoPaginator.xhtml">
+                        </ui:include>
+                    </ui:insert>
 
-            <table>
-                <tr>
-                    <td><h:outputText value="Enter New Username: " /></td>
-                    <td><h:inputText id="username" 
-                                     value="#{subscriptionBean.username}" />
-                    </td>
-                </tr>
-                 <tr>
-                    <td><h:outputText value="Enter New Password: " /></td>
-                    <td><h:inputSecret id="password" 
-                                       value="#{subscriptionBean.password}" />
-                    </td>
-                </tr>
-                 <tr>
-                    <td><h:outputText value="Enter Mail: " /></td>
-                    <td><h:inputText id="mail" 
-                                     value="#{subscriptionBean.mail}" />
-                    </td>
-                </tr>
-                <tr>
-                    <td><h:outputText value="Enter Address: " /></td>
-                    <td><h:inputText id="address" 
-                                     value="#{subscriptionBean.address}" />
-                    </td>
-                </tr>
-                <tr>
-                    <td> </td>
-                    <td><h:commandButton value="Create User" 
-                                         action="#{subscriptionBean.Subscript}"/>
-                    </td>
-                </tr>
-            </table>
 
-        </h:form>
+                </div>
+            </div>
+        </div>
     </h:body>
 </html>
 
