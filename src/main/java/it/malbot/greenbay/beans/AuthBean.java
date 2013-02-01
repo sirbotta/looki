@@ -79,7 +79,7 @@ public class AuthBean implements Serializable {
         password = null;
         username = null;
 
-        return "login";
+        return "forceLoginPage";
     }
 
     public String getUserGreatings() {

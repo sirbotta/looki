@@ -2,30 +2,43 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>Facelet Title</title>
+        <title>Login</title> 
+        <link rel="stylesheet" type="text/css" href="./resources/css/style.css"/>
     </h:head>
     <h:body>
-        <ui:composition template="/template/common/commonLayout.xhtml">
-            <ui:define name="content">
-
-                <h:form>
-                    <h:outputText value="Descrizione #{auctionBean.auction.description}"/><br/>
-                    <h:outputText id="price" value="Prezzo  #{auctionBean.auction.actual_price}"/><br/>
-                    <h:outputText id="min_increment" value="Incremento min #{auctionBean.auction.min_increment}"/><br/>
-                    Scade tra <span class="timer">#{auctionBean.auction.due_date}</span><br/>
-                    <h:outputText value="Venditore #{dbmanager.findUsernameById(auctionBean.auction.user_id)}"/><br/>
-                    <h:outputText value="Attualmente vince #{dbmanager.findUsernameById(auctionBean.auction.winner_id)}"/><br/>
-                    <h:inputText id="increment" value="#{auctionBean.min_increment}"/>
-                    <h:commandButton action="#{auctionBean.goToConfirmBid()}" value="Rilancia!">
-                    </h:commandButton>
-
-                </h:form>
-            </ui:define>
-
-        </ui:composition>
+        <div id="header">
+            <ui:insert name="img" >
+                <ui:include src="/template/common/headerImg.xhtml">
+                </ui:include>
+            </ui:insert>
+            <ui:insert name="menu" >
+                <ui:include src="/template/common/menu.xhtml">
+                </ui:include>
+            </ui:insert>
+        </div>
+        <div id="content">
+            <div id="left-container">
+                <div class="left-box" >
+                    <ui:insert name="categories-list" >
+                        <ui:include src="/template/common/categoriesList.xhtml">
+                        </ui:include>
+                    </ui:insert>
+                </div>
+            </div>
+            <div id="right-container">
+                <div class="right-box">
+                      <ui:insert name="auction" >
+                        <ui:include src="/template/common/auction.xhtml">
+                        </ui:include>
+                    </ui:insert>
+                 
+                </div>
+            </div>
+        </div>
     </h:body>
 </html>
 

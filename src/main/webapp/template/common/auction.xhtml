@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <body>        
+        <ui:composition>
+            <h:form>
+                <p:panelGrid>  
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:lightBox>
+                                <h:outputLink value="./resources/img/#{auctionBean.auction.url_image}" title="#{auctionBean.auction.description}">  
+                                    <p:graphicImage height="100px" width="100px" value="./resources/img/#{auctionBean.auction.url_image}"/> 
+                                </h:outputLink>  
+                            </p:lightBox>
+                        </p:column>
+                    </p:row> 
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel for="desc" value="Descrizione" />  
+                        </p:column>
+                        <p:column>
+                            <h:outputText id="desc" value="#{auctionBean.auction.description}"/>
+                        </p:column>
+                    </p:row> 
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel for="pr" value="Prezzo" />  
+                        </p:column>
+                        <p:column>
+                            <h:outputText id="pr" value="#{auctionBean.auction.actual_price}"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel for="minIncr" value="Incremento minimo" />  
+                        </p:column>
+                        <p:column>
+                            <h:outputText id="minIncr" value="#{auctionBean.auction.min_increment}"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel for="scad" value="Scade tra" />  
+                        </p:column>
+                        <p:column>
+                            <h:outputText id="scad" value="#{auctionBean.auction.due_date}"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel for="vend" value="Descrizione" />  
+                        </p:column>
+                        <p:column>
+                            <h:outputText id="vend" value="#{dbmanager.findUsernameById(auctionBean.auction.user_id)}"/>
+                        </p:column>
+                    </p:row>
+
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel for="vincAt" value="Attualmente vince" />  
+                        </p:column>
+                        <p:column>
+                            <h:outputText id="vincAt" value="#{dbmanager.findUsernameById(auctionBean.auction.winner_id)}"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel for="rilancio" value="Rilancia" />  
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="rilancio" value="#{auctionBean.min_increment}"/>
+                        </p:column>
+                    </p:row>
+
+
+                    <f:facet name="footer">
+                        <p:row>
+                            <p:column colspan="2">
+                                <p:commandButton ajax="false" value="Rilancia!" action="#{auctionBean.goToConfirmBid()}"/> 
+                            </p:column>
+                        </p:row>
+                    </f:facet>  
+                </p:panelGrid>
+            </h:form>
+        </ui:composition>
+    </body>
+</html>
