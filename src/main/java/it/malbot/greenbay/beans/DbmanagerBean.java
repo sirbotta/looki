@@ -7,6 +7,7 @@ package it.malbot.greenbay.beans;
 import it.malbot.greenbay.model.Auction;
 import it.malbot.greenbay.model.Auction_Bid;
 import it.malbot.greenbay.model.Category;
+import it.malbot.greenbay.model.Sell;
 import it.malbot.greenbay.model.User;
 import java.io.Serializable;
 import java.sql.Connection;
@@ -156,7 +157,7 @@ public class DbmanagerBean implements Serializable {
                 + "FROM AUCTIONS "
                 + "INNER JOIN CATEGORIES on AUCTIONS.category_id=CATEGORIES.id "
                 + "INNER JOIN USERS on AUCTIONS.user_id=USERS.id "
-                + "WHERE AUCTIONS.category_id = ? "
+                + "WHERE AUCTIONS.category_id = ? AND AUCTIONS.closed = FALSE "
                 + "ORDER BY AUCTIONS.due_date ASC");
 
         stm.setInt(1, category_id);
@@ -203,7 +204,7 @@ public class DbmanagerBean implements Serializable {
                 + "FROM AUCTIONS "
                 + "INNER JOIN CATEGORIES on AUCTIONS.category_id=CATEGORIES.id "
                 + "INNER JOIN USERS on AUCTIONS.user_id=USERS.id "
-                + "WHERE LOWER(AUCTIONS.description) like ? "
+                + "WHERE LOWER(AUCTIONS.description) like ? AND AUCTIONS.closed = FALSE "
                 + "ORDER BY AUCTIONS.due_date ASC");
 
         stm.setString(1, "%" + query.toLowerCase() + "%");
@@ -247,7 +248,7 @@ public class DbmanagerBean implements Serializable {
                 + "FROM AUCTIONS "
                 + "INNER JOIN CATEGORIES on AUCTIONS.category_id=CATEGORIES.id "
                 + "INNER JOIN USERS on AUCTIONS.user_id=USERS.id "
-                + "WHERE AUCTIONS.user_id = ? "
+                + "WHERE AUCTIONS.user_id = ? AND AUCTIONS.closed = FALSE "
                 + "ORDER BY AUCTIONS.due_date ASC");
 
         stm.setInt(1, user_id);
@@ -335,7 +336,7 @@ public class DbmanagerBean implements Serializable {
                 + "FROM AUCTIONS "
                 + "INNER JOIN CATEGORIES on AUCTIONS.category_id=CATEGORIES.id "
                 + "INNER JOIN USERS on AUCTIONS.user_id=USERS.id "
-                + "WHERE AUCTIONS.user_id = ? AND AUCTIONS.winner_id IS NOT NULL "
+                + "WHERE AUCTIONS.user_id = ? AND AUCTIONS.winner_id IS NOT NULL AND AUCTIONS.closed = FALSE "
                 + "ORDER BY AUCTIONS.due_date ASC");
 
         stm.setInt(1, user_id);
@@ -379,7 +380,7 @@ public class DbmanagerBean implements Serializable {
                 + "FROM AUCTIONS "
                 + "INNER JOIN CATEGORIES on AUCTIONS.category_id=CATEGORIES.id "
                 + "INNER JOIN USERS on AUCTIONS.user_id=USERS.id "
-                + "WHERE AUCTIONS.user_id = ? AND AUCTIONS.winner_id IS NULL "
+                + "WHERE AUCTIONS.user_id = ? AND AUCTIONS.winner_id IS NULL AND AUCTIONS.closed = FALSE "
                 + "ORDER BY AUCTIONS.due_date ASC");
 
         stm.setInt(1, user_id);
@@ -422,7 +423,7 @@ public class DbmanagerBean implements Serializable {
                 "SELECT AUCTIONS.*,CATEGORIES.name as category_name,USERS.username as username "
                 + "FROM AUCTIONS "
                 + "INNER JOIN CATEGORIES on AUCTIONS.category_id=CATEGORIES.id "
-                + "INNER JOIN USERS on AUCTIONS.user_id=USERS.id "
+                + "INNER JOIN USERS on AUCTIONS.user_id=USERS.id AND AUCTIONS.closed = FALSE "
                 + "ORDER BY AUCTIONS.due_date ASC");
 
         try {
@@ -471,6 +472,7 @@ public class DbmanagerBean implements Serializable {
                 + "INNER JOIN "
                 + "(SELECT DISTINCT auction_id,user_id from AUCTIONS_BIDS where user_id = ?) as BIDDERS "
                 + "on BIDDERS.auction_id=AUCTIONS.id "
+                + "WHERE AUCTIONS.closed = FALSE "
                 + "ORDER BY AUCTIONS.due_date ASC");
 
         stm.setInt(1, user_id);
@@ -521,7 +523,7 @@ public class DbmanagerBean implements Serializable {
                 + "INNER JOIN "
                 + "(SELECT DISTINCT auction_id,user_id from AUCTIONS_BIDS where user_id = ?) as BIDDERS "
                 + "on BIDDERS.auction_id=AUCTIONS.id "
-                + "WHERE AUCTIONS.winner_id=BIDDERS.user_id "
+                + "WHERE AUCTIONS.winner_id=BIDDERS.user_id AND AUCTIONS.closed = FALSE "
                 + "ORDER BY AUCTIONS.due_date ASC");
 
         stm.setInt(1, user_id);
@@ -572,7 +574,7 @@ public class DbmanagerBean implements Serializable {
                 + "INNER JOIN "
                 + "(SELECT DISTINCT auction_id,user_id from AUCTIONS_BIDS where user_id = ?) as BIDDERS "
                 + "on BIDDERS.auction_id=AUCTIONS.id "
-                + "WHERE AUCTIONS.winner_id!=BIDDERS.user_id "
+                + "WHERE AUCTIONS.winner_id!=BIDDERS.user_id AND AUCTIONS.closed = FALSE "
                 + "ORDER BY AUCTIONS.due_date ASC");
 
         stm.setInt(1, user_id);
@@ -689,6 +691,37 @@ public class DbmanagerBean implements Serializable {
         }
         return auctionBidList;
     }
+    
+    public List<Auction_Bid> getAuctionBidByAuctionIdBelowOffer(int auction_id, double offer) throws SQLException {
+        List<Auction_Bid> auctionBidList = new ArrayList<Auction_Bid>();
+        PreparedStatement stm = con.prepareStatement(
+                "SELECT * FROM AUCTIONS_BIDS WHERE auction_id = ?  AND offer < ? ORDER BY offer DESC");
+
+        stm.setInt(1, auction_id);
+        stm.setDouble(2,offer);
+
+        try {
+            ResultSet rs = stm.executeQuery();
+            try {
+                while (rs.next()) {
+                    Auction_Bid auction_bid = new Auction_Bid();
+
+                    auction_bid.setId(rs.getInt("id"));
+                    auction_bid.setAuction_id(rs.getInt("auction_id"));
+                    auction_bid.setUser_id(rs.getInt("user_id"));
+                    auction_bid.setBid_date(rs.getTimestamp("bid_date"));
+                    auction_bid.setOffer(rs.getDouble("offer"));
+
+                    auctionBidList.add(auction_bid);
+                }
+            } finally {
+                rs.close();
+            }
+        } finally {
+            stm.close();
+        }
+        return auctionBidList;
+    }
 
     public Auction findAuctionById(int auction_id) throws SQLException {
         PreparedStatement stm = con.prepareStatement(
@@ -696,7 +729,7 @@ public class DbmanagerBean implements Serializable {
                 + "FROM AUCTIONS "
                 + "INNER JOIN CATEGORIES on AUCTIONS.category_id=CATEGORIES.id "
                 + "INNER JOIN USERS on AUCTIONS.user_id=USERS.id "
-                + "WHERE AUCTIONS.category_id = ?");
+                + "WHERE AUCTIONS.id = ?");
         try {
             stm.setInt(1, auction_id);
 
@@ -822,6 +855,58 @@ public class DbmanagerBean implements Serializable {
             stm.close();
         }
     }
+    
+    public int insertSell(Sell sell) throws SQLException{
+        ResultSet gK;
+        int key;
+        PreparedStatement stm = con.prepareStatement(
+                "INSERT INTO SELLS (seller_id,buyer_id,auction_id,final_price,tax) "
+                + "VALUES (?,?,?,?,?)");
+        
+
+        stm.setInt(1, sell.getSeller_id());
+        stm.setInt(2, sell.getBuyer_id());
+        stm.setInt(3, sell.getAuction_id());
+        stm.setDouble(4, sell.getFinal_price());
+        stm.setDouble(5, sell.getTax());
+        
+        
+        PreparedStatement stmR = con.prepareStatement(
+                "SELECT id FROM SELLS "
+                +"WHERE SELLS.seller_id = ? AND SELLS.buyer_id = ? AND SELLS.auction_id = ? ");
+        
+        stmR.setInt(1, sell.getSeller_id());
+        stmR.setInt(2, sell.getBuyer_id());
+        stmR.setInt(3, sell.getAuction_id());
+        
+        try {
+            stm.executeUpdate();
+            gK = stmR.executeQuery();
+            if (gK.next()) {
+                key = gK.getInt(1);
+                return key;
+            } else {
+                return 0;
+            }
+        } finally {
+            stm.close();
+        }
+    }
+    
+    public int closeAuction(int auction_id) throws SQLException{
+        PreparedStatement stm = con.prepareStatement(
+                "UPDATE AUCTIONS "
+                + "SET closed = TRUE "
+                + "WHERE id= ?");
+        stm.setInt(1, auction_id);
+
+        try {
+            return stm.executeUpdate();
+        } finally {
+            stm.close();
+        }
+    }
+    
 
     //trova la puntata massima
     public Auction_Bid findMaxAuctionBidByAuctionID(int auction_id) throws SQLException {

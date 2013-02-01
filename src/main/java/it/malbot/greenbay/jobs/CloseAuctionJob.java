@@ -6,6 +6,7 @@ package it.malbot.greenbay.jobs;
 
 import it.malbot.greenbay.beans.DbmanagerBean;
 import it.malbot.greenbay.model.Auction;
+import it.malbot.greenbay.model.Sell;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -37,10 +38,48 @@ public class CloseAuctionJob implements Job, Serializable {
         int auction_id = dataMap.getInt("auction_id");
         System.out.println("ovvero " + auction_id);
         Auction auction;
+        Sell sell = new Sell();
+        Double tax,price;
         try {
             System.out.println("mi chiamo "+ dbmanager.findUsernameById(1));
             auction = dbmanager.findAuctionById(auction_id);
-            System.out.println("Chiudo asta " + auction.getDescription());
+            
+            System.out.println("Provo a chiudere l' asta " + auction.getDescription());
+            dbmanager.closeAuction(auction_id);
+            System.out.println("Ho chiuso asta " + auction.getDescription());
+            
+            //generazione di una vendita base con tasse 1.23
+            sell.setSeller_id(auction.getUser_id());
+            sell.setAuction_id(auction_id);
+            sell.setFinal_price(-1.23);
+            sell.setTax(1.23);
+            System.out.println("Generato i dati base di un asta ");
+            
+            //se non c'è nessun winner
+            if(auction.getWinner_id()!=0){
+            
+            //prelevo il prezzo finale
+            price=auction.getActual_price();
+            //calcolo le tasse
+            tax= (price / 100 ) * 1.25 ;
+            //tolgo le tasse dal guadagno
+            price = price - tax;
+            
+            sell.setFinal_price(price);
+            sell.setTax(tax);
+            sell.setBuyer_id(auction.getWinner_id());
+            }
+            
+            //inserisco il sell al db
+            dbmanager.insertSell(sell);
+            System.out.println("Inserito il sell correttamente ");
+            
+            //notificare utente
+            
+            
+            
+            
+            
         } catch (SQLException ex) {
             System.out.println("non va dbmanager ");
             Logger.getLogger(CloseAuctionJob.class.getName()).log(Level.SEVERE, null, ex);

@@ -9,6 +9,7 @@ import it.malbot.greenbay.model.Auction_Bid;
 import it.malbot.greenbay.model.User;
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -38,6 +39,7 @@ public class AuctionBean implements Serializable {
     private double bid_value;
     private double min_increment;//incremento minimo attaccato alle pagine
     private Auction auction;
+    private List<Auction_Bid> auction_bid_story;
 
     /*
      @PostConstruct
@@ -56,6 +58,16 @@ public class AuctionBean implements Serializable {
         auction_id = auction.getId();
         setMin_increment(roundToCent(auction.getMin_increment() + auction.getActual_price()));
         return "auctionPage";
+    }
+
+    public String goToAuctionStoryPage() throws SQLException {
+        auction_id = auction.getId();
+        //sperimentale... non usare
+        //setAuction_bid_story(dbmanager.getAuctionBidByAuctionId(auction_id));
+
+        //trova tutte le bid sotto il prezzo attuale, così non si sanno le puntate maggiori dagli altri utenti
+        setAuction_bid_story(dbmanager.getAuctionBidByAuctionIdBelowOffer(auction_id, auction.getActual_price()));
+        return "auctionStoryPage";
     }
 
     public String goToConfirmBid() throws SQLException {
@@ -96,17 +108,28 @@ public class AuctionBean implements Serializable {
                 FacesMessage fm = new FacesMessage("Sei già il miglior offerente e la tua offerta è più bassa della precedente");
                 FacesContext.getCurrentInstance().addMessage("Errore", fm);
                 return "picche";
-            }
+            } else if (u.getId() == auction.getWinner_id() && bid_value > bestAuction_Bid.getOffer())//altrimenti miglioro la mia best bid senza incrementi
+            {
+                dbmanager.insertBid(u.getId(), auction_id, bid_value);
+                return "auctionPage";
 
+            }
+            
+            
             //inserisco la puntata e controllo che ci sia in db
             if (dbmanager.insertBid(u.getId(), auction_id, bid_value) != 0) {
 
 
                 ///se l'offerta è maggiore della best
                 if (bestAuction_Bid.getOffer() < bid_value) {
-
+                    double big_offer = bid_value;
                     //aumento soltanto dell'incremento minimo
                     bid_value = roundToCent(auction.getMin_increment() + auction.getActual_price());
+                    //se la nuova bid_value è minore dell'offerta iniziale
+                    if (bid_value < big_offer) {
+                        //inserisco una puntata automatica  
+                        dbmanager.insertBid(u.getId(), auction_id, bid_value);
+                    }
 
 
                     if (dbmanager.updateAuction(auction_id, u.getId(), bid_value) != 0) {
@@ -124,6 +147,9 @@ public class AuctionBean implements Serializable {
                     if (bid_value > bestAuction_Bid.getOffer()) {
                         //utilizzo l'offerta più alta e ignoro l'incremento
                         bid_value = bestAuction_Bid.getOffer();
+                    } else {
+                        //altrimenti inserisco un puntata automatica e continuo
+                        dbmanager.insertBid(bestAuction_Bid.getUser_id(), auction_id, bid_value);
                     }
 
                     if (dbmanager.updateAuction(auction_id, bestAuction_Bid.getUser_id(), bid_value) != 0) {
@@ -136,20 +162,29 @@ public class AuctionBean implements Serializable {
 
 
             }
-        }else
-        {
-             //inserisco la puntata e controllo che ci sia in db
-            if (dbmanager.insertBid(u.getId(), auction_id, bid_value) != 0){
-                //aumento soltanto dell'incremento minimo
+        } else {
+            //inserisco la puntata e controllo che ci sia in db
+            if (dbmanager.insertBid(u.getId(), auction_id, bid_value) != 0) {
+
+                double big_offer = bid_value;
+
+                //aumento soltanto dell'incremento minimo sull'iniziale
                 bid_value = roundToCent(auction.getMin_increment() + auction.getActual_price());
 
+                //se la nuova bid_value è minore dell'offerta iniziale
+                if (bid_value < big_offer) {
+                    //inserisco una puntata automatica  
+                    dbmanager.insertBid(u.getId(), auction_id, bid_value);
+                }
 
-                    if (dbmanager.updateAuction(auction_id, u.getId(), bid_value) != 0) {
-                        auction.setWinner_id(u.getId());
-                        auction.setActual_price(bid_value);
-                        setMin_increment(roundToCent(auction.getMin_increment() + bid_value));
-                        return "auctionPage";
-                    }
+
+                if (dbmanager.updateAuction(auction_id, u.getId(), bid_value) != 0) {
+                    auction.setWinner_id(u.getId());
+                    auction.setActual_price(bid_value);
+                    setMin_increment(roundToCent(auction.getMin_increment() + bid_value));
+
+                    return "auctionPage";
+                }
             }
         }
 
@@ -235,5 +270,19 @@ public class AuctionBean implements Serializable {
     //trimmare ai centesimi
     private Double roundToCent(Double value) {
         return (double) Math.round(value * 100) / 100;
+    }
+
+    /**
+     * @return the auction_bid_story
+     */
+    public List<Auction_Bid> getAuction_bid_story() {
+        return auction_bid_story;
+    }
+
+    /**
+     * @param auction_bid_story the auction_bid_story to set
+     */
+    public void setAuction_bid_story(List<Auction_Bid> auction_bid_story) {
+        this.auction_bid_story = auction_bid_story;
     }
 }
