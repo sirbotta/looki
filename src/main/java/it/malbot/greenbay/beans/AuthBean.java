@@ -128,12 +128,12 @@ public class AuthBean implements Serializable {
 
     public void isAdmin() {
 
-        if (user == null && user.isAdmin_role()) {
+        if (user == null || !user.isAdmin_role()) {
             FacesContext fc = FacesContext.getCurrentInstance();
             FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_WARN, "ATTENZIONE", "Utente non amministratore");
             FacesContext.getCurrentInstance().addMessage(null, fm);
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-            
+            //FacesContext.getCurrentInstance().getExternalContext().getFlash().doPostPhaseActions(FacesContext.getCurrentInstance());
             ConfigurableNavigationHandler nav = (ConfigurableNavigationHandler) fc.getApplication().getNavigationHandler();
 
             nav.performNavigation("forceLoginPage");
@@ -148,9 +148,10 @@ public class AuthBean implements Serializable {
             FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_WARN, "ATTENZIONE", "Bisogna effettuare il login prima di eseguire l'azione");
             FacesContext.getCurrentInstance().addMessage(null, fm);
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+            //FacesContext.getCurrentInstance().getExternalContext().getFlash().doPostPhaseActions(FacesContext.getCurrentInstance());
             //ConfigurableNavigationHandler nav = (ConfigurableNavigationHandler) fc.getApplication().getNavigationHandler();
             RedirectNavigationHandler nav = (RedirectNavigationHandler) fc.getApplication().getNavigationHandler();
-            nav.performNavigation("forceLoginPage");///da cambiare con forceloginpoi
+            nav.performNavigation("forceLoginPage");
 
         }
     }

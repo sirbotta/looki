@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <f:event listener="#{authBean.isAdmin}" type="preRenderView" />
+    <h:head>
+        <title>Admin Vendite</title>
+        <link rel="stylesheet" type="text/css" href="./resources/css/style.css"/>
+    </h:head>
+    <h:body>
+        <div id="header">
+            <ui:insert name="img" >
+                <ui:include src="/template/common/headerImg.xhtml">
+                </ui:include>
+            </ui:insert>
+            <h:form>
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                <p:commandButton action="#{adminBean.goToSellsData()}"  value="Dati vendite"/>
+                <p:commandButton action="#{adminBean.goToOpenAuctions()}"  value="Aste aperte"/>
+                <p:commandButton action="#{authBean.InvalidateUser()}"  value="Logout"/>
+            </h:form>
+        </div>
+        <div id="content">
+            <h:form>
+            <div id="left-container">
+                <div class="left-box" >
+                    
+                        <h:panelGrid columns="2">
+                            <p:panel header="Export All Data">
+                                <h:commandLink>
+                                    <p:graphicImage value="./resources/img/excel.png" />
+                                    <p:dataExporter type="xls" target="tbl" fileName="sells" />
+                                </h:commandLink>
+
+                                <h:commandLink>
+                                    <p:graphicImage value="./resources/img/pdf.png" />
+                                    <p:dataExporter type="pdf" target="tbl" fileName="sells"/>
+                                </h:commandLink>
+
+                                <h:commandLink>
+                                    <p:graphicImage value="./resources/img/csv.png" />
+                                    <p:dataExporter type="csv" target="tbl" fileName="sells" />
+                                </h:commandLink>
+
+                                <h:commandLink>
+                                    <p:graphicImage value="./resources/img/xml.png" />
+                                    <p:dataExporter type="xml" target="tbl" fileName="sells" />
+                                </h:commandLink>
+                            </p:panel>
+
+                            <p:panel header="Export Page Data">
+                                <h:commandLink>
+                                    <p:graphicImage value="./resources/img/excel.png" />
+                                    <p:dataExporter type="xls" target="tbl" fileName="sells" pageOnly="true"/>
+                                </h:commandLink>
+
+                                <h:commandLink>
+                                    <p:graphicImage value="./resources/img/pdf.png" />
+                                    <p:dataExporter type="pdf" target="tbl" fileName="sells" pageOnly="true"/>
+                                </h:commandLink>
+
+                                <h:commandLink>
+                                    <p:graphicImage value="./resources/img/csv.png" />
+                                    <p:dataExporter type="csv" target="tbl" fileName="sells" pageOnly="true"/>
+                                </h:commandLink>
+
+                                <h:commandLink>
+                                    <p:graphicImage value="./resources/img/xml.png" />
+                                    <p:dataExporter type="xml" target="tbl" fileName="sells" pageOnly="true"/>
+                                </h:commandLink>
+                            </p:panel>
+                        </h:panelGrid>
+
+                    
+                </div>
+            </div>
+
+            <div id="right-container">
+                <div class="right-box">
+
+                    <p:dataTable id="tbl" var="sell" value="#{adminBean.sells}" paginator="true" rows="10">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="ID Asta" />
+                            </f:facet>
+                            <h:outputText value="#{sell.auction_id}" />
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Venditore" />
+                            </f:facet>
+                            <h:outputText value="#{sell.seller_id}-#{dbmanager.findUsernameById(sell.seller_id)}"/>
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Compratore" />
+                            </f:facet>
+                            <h:outputText value="#{sell.buyer_id}-#{dbmanager.findUsernameById(sell.buyer_id)}"/>
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Prezzo finale" />
+                            </f:facet>
+                            <h:outputText value="#{sell.final_price+sell.tax}" >
+                                <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
+                                </h:outputText>
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Tasse" />
+                            </f:facet>
+                            <h:outputText value="#{sell.tax}" >
+                                 <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
+                                </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+
+
+
+                </div>
+            </div>
+
+            </h:form>
+        </div>
+    </h:body>
+</html>
+

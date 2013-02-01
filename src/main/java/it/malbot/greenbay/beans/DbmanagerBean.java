@@ -104,6 +104,36 @@ public class DbmanagerBean implements Serializable {
             stm.close();
         }
     }
+    
+    public User findUser(int user_id) throws SQLException {
+        PreparedStatement stm = con.prepareStatement(
+                "SELECT * FROM USERS WHERE id = ?");
+        try {
+            stm.setInt(1, user_id);
+            
+            ResultSet rs = stm.executeQuery();
+            try {
+                if (rs.next()) {
+                    User user = new User();
+                    user.setId(rs.getInt("id"));
+                    user.setUsername(rs.getString("username"));
+                    user.setPassword(rs.getString("password"));
+                    user.setAddress(rs.getString("address"));
+                    user.setMail(rs.getString("mail"));
+                    user.setRegistration_date(rs.getTimestamp("registration_date"));
+                    user.setAdmin_role(rs.getBoolean("admin_role"));
+                    return user;
+                } else {
+                    return null;
+                }
+            } finally {
+                // ricordarsi SEMPRE di chiudere i ResultSet in un blocco
+                rs.close();
+            }
+        } finally { // ricordarsi SEMPRE di chiudere i PreparedStatement in un blocco finally
+            stm.close();
+        }
+    }
 
     public String findUsernameById(int user_id) throws SQLException {
         PreparedStatement stm = con.prepareStatement(
@@ -149,7 +179,50 @@ public class DbmanagerBean implements Serializable {
         }
         return categoryList;
     }
+    
+     public List<Auction> getAuctionOpen() throws SQLException {
+        List<Auction> auctionList = new ArrayList<Auction>();
+        PreparedStatement stm = con.prepareStatement(
+                "SELECT AUCTIONS.*,CATEGORIES.name as category_name,USERS.username as username "
+                + "FROM AUCTIONS "
+                + "INNER JOIN CATEGORIES on AUCTIONS.category_id=CATEGORIES.id "
+                + "INNER JOIN USERS on AUCTIONS.user_id=USERS.id "
+                + "WHERE AUCTIONS.closed = FALSE "
+                + "ORDER BY AUCTIONS.due_date ASC");
+ 
 
+        try {
+            ResultSet rs = stm.executeQuery();
+            try {
+                while (rs.next()) {
+                    Auction a = new Auction();
+                    a.setId(rs.getInt("id"));
+                    a.setUser_id(rs.getInt("user_id"));
+                    a.setUsername(rs.getString("username"));
+                    a.setDescription(rs.getString("description"));
+                    a.setCategory_id(rs.getInt("category_id"));
+                    a.setCategory_name(rs.getString("category_name"));
+                    a.setInitial_price(rs.getDouble("initial_price"));
+                    a.setMin_increment(rs.getDouble("min_increment"));
+                    a.setActual_price(rs.getDouble("actual_price"));
+                    a.setWinner_id(rs.getInt("winner_id"));
+                    a.setClosed(rs.getBoolean("closed"));
+                    a.setUrl_image(rs.getString("url_image"));
+                    a.setDelivery_price(rs.getDouble("delivery_price"));
+                    a.setDue_date(rs.getTimestamp("due_date"));
+                    a.setInsertion_date(rs.getTimestamp("insertion_date"));
+
+                    auctionList.add(a);
+                }
+            } finally {
+                rs.close();
+            }
+        } finally {
+            stm.close();
+        }
+        return auctionList;
+    }
+    
     public List<Auction> getAuctionByCategory(int category_id) throws SQLException {
         List<Auction> auctionList = new ArrayList<Auction>();
         PreparedStatement stm = con.prepareStatement(
@@ -423,7 +496,8 @@ public class DbmanagerBean implements Serializable {
                 "SELECT AUCTIONS.*,CATEGORIES.name as category_name,USERS.username as username "
                 + "FROM AUCTIONS "
                 + "INNER JOIN CATEGORIES on AUCTIONS.category_id=CATEGORIES.id "
-                + "INNER JOIN USERS on AUCTIONS.user_id=USERS.id AND AUCTIONS.closed = FALSE "
+                + "INNER JOIN USERS on AUCTIONS.user_id=USERS.id "
+                + "WHERE AUCTIONS.closed = FALSE "
                 + "ORDER BY AUCTIONS.due_date ASC");
 
         try {
@@ -721,6 +795,35 @@ public class DbmanagerBean implements Serializable {
             stm.close();
         }
         return auctionBidList;
+    }
+    
+    public List<Sell> getSell() throws SQLException{
+        List<Sell> sellList = new ArrayList<Sell>();
+        PreparedStatement stm = con.prepareStatement(
+                "SELECT * FROM SELLS ORDER BY SELLS.sell_date DESC");
+        try {
+            ResultSet rs = stm.executeQuery();
+            try {
+                while (rs.next()) {
+                    Sell sell = new Sell();
+
+                    sell.setId(rs.getInt("id"));
+                    sell.setAuction_id(rs.getInt("auction_id"));
+                    sell.setSeller_id(rs.getInt("seller_id"));
+                    sell.setBuyer_id(rs.getInt("buyer_id"));
+                    sell.setSell_date(rs.getTimestamp("sell_date"));
+                    sell.setFinal_price(rs.getDouble("final_price"));
+                    sell.setTax(rs.getDouble("tax"));
+
+                    sellList.add(sell);
+                }
+            } finally {
+                rs.close();
+            }
+        } finally {
+            stm.close();
+        }
+        return sellList;
     }
 
     public Auction findAuctionById(int auction_id) throws SQLException {

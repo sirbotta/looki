@@ -12,23 +12,27 @@ and open the template in the editor.
     <body>        
         <ui:composition>
             <h:form>
-                    <p:panelGrid columns="2">  
-                        <h:outputLabel for="desc" value="Descrizione" />  
-                        <h:outputText id="desc" value="#{auctionBean.auction.description}"/>
-                        
-                        <h:outputLabel for="pr" value="Prezzo" />  
-                        <h:outputText id="pr" value="#{auctionBean.auction.actual_price}"/>
-                        
-                        <h:outputLabel for="scad" value="Scade tra" />  
-                        <h:outputText id="scad" value="#{auctionBean.auction.due_date}"/>
-                        
-                        <h:outputLabel for="myBid" value="Offri " />  
-                        <h:outputText id="myBid" value="#{auctionBean.min_increment}"/>
-                       
-                        <f:facet name="footer"> 
-                            <p:commandButton ajax="false" value="Conferma" action="#{auctionBean.confirmBid()}"/>  
-                        </f:facet>  
-                    </p:panelGrid>
+                <p:panelGrid columns="2">  
+                    <h:outputLabel for="desc" value="Descrizione" />  
+                    <h:outputText id="desc" value="#{auctionBean.auction.description}"/>
+
+                    <h:outputLabel for="pr" value="Prezzo" />  
+                    <h:outputText id="pr" value="#{auctionBean.auction.actual_price}">
+                        <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
+                    </h:outputText>
+
+                    <h:outputLabel for="timer" value="Scade tra" />  
+                    <h:outputText id="timer" value="#{auctionBean.auction.due_date}"/>
+
+                    <h:outputLabel for="myBid" value="Offri " />  
+                    <h:outputText id="myBid" value="#{auctionBean.min_increment}">
+                        <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
+                    </h:outputText>
+
+                    <f:facet name="footer"> 
+                        <p:commandButton ajax="false" value="Conferma" action="#{auctionBean.confirmBid()}"/>  
+                    </f:facet>  
+                </p:panelGrid>
             </h:form>
         </ui:composition>
     </body>

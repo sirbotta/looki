@@ -35,21 +35,27 @@ and open the template in the editor.
                         <f:facet name="header">
                             <h:outputText value="Prezzo iniziale" />
                         </f:facet>
-                        <h:outputText value="#{a.initial_price}"  />
+                        <h:outputText value="#{a.initial_price}"  >
+                            <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
+                        </h:outputText>
                     </p:column>
 
                     <p:column>
                         <f:facet name="header">
                             <h:outputText value="Prezzo attuale" />
                         </f:facet>
-                        <h:outputText value="#{a.actual_price}" />
+                        <h:outputText value="#{a.actual_price}" >
+                            <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
+                        </h:outputText>
                     </p:column>
 
                     <p:column>
                         <f:facet name="header">
                             <h:outputText value="Incremento" />
                         </f:facet>
-                        <h:outputText value="#{a.min_increment}" />
+                        <h:outputText value="#{a.min_increment}" >
+                            <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
+                        </h:outputText>
                     </p:column>
 
                     <p:column>
@@ -66,10 +72,10 @@ and open the template in the editor.
                             <h:outputText value="Storico" />
                         </f:facet>
                         <h:commandLink action="#{auctionBean.goToAuctionStoryPage()}" value="visualizza">
-                            
+
                             <f:setPropertyActionListener value="#{a}" 
                                                          target="#{auctionBean.auction}" /> 
-                            
+
                         </h:commandLink>
                     </p:column>
 

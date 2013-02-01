@@ -43,7 +43,9 @@ and open the template in the editor.
                         <f:facet name="header">
                             <h:outputText value="Prezzo attuale" />
                         </f:facet>
-                        <h:outputText value="#{a.actual_price}" />
+                        <h:outputText value="#{a.actual_price}" >
+                            <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
+                        </h:outputText>
                     </p:column>
 
                     <p:column>
@@ -57,7 +59,9 @@ and open the template in the editor.
                         <f:facet name="header">
                             <h:outputText value="Prezzo Spedizioni" />
                         </f:facet>
-                        <h:outputText value="#{a.delivery_price}" />
+                        <h:outputText value="#{a.delivery_price}" >
+                            <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
+                        </h:outputText>
                     </p:column>
 
                     <p:column>

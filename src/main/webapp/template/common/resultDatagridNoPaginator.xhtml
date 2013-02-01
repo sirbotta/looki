@@ -19,20 +19,16 @@ and open the template in the editor.
 
                     <p:panel header="Lotto N:#{a.id} - #{a.description}" style="text-align:center" >
                         <h:panelGrid columns="1" style="width:100%" >
-                            <p:graphicImage height="100px" width="100px" value="./resources/img/#{a.url_image}"/> 
-                            <h:outputText  value="Scade il"/>
-                            <h:outputText class="timer" value="#{a.due_date}"/>
-                            <h:outputText value="Prezzo attuale #{a.actual_price} €"/>
-                            <h:outputText value="Venditore #{dbmanager.findUsernameById(a.user_id)}"/>
-                            <h:outputText value="Utente vincente #{dbmanager.findUsernameById(a.winner_id)}"/>
-                            <h:outputText value="Prezzo Spedizione #{a.delivery_price} €"/>
-
-                            <h:commandLink action="#{auctionBean.goToAuctionPage()}" value="visualizza">
-
+                            <h:commandLink action="#{auctionBean.goToAuctionPage()}">
+                                <p:graphicImage height="200px" width="200px" value="./resources/img/#{a.url_image}"/>
                                 <f:setPropertyActionListener value="#{a}" 
                                                              target="#{auctionBean.auction}" /> 
                             </h:commandLink>
-
+                            <h:outputText class="timer" value="#{a.due_date}"/>
+                            <h:outputText value="#{a.actual_price}" style="font-weight:bold">
+                                <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
+                            </h:outputText>
+                            <h:outputText value="Venditore #{dbmanager.findUsernameById(a.user_id)}"/>
 
 
                         </h:panelGrid>
