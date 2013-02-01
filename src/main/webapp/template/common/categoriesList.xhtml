@@ -12,18 +12,27 @@ and open the template in the editor.
       xmlns:c="http://java.sun.com/jsp/jstl/core">
     <body>        
         <ui:composition>
-                    <h:form>
-                        <p:menu>
-                            <p:submenu label="Categoria">
-                                <c:forEach items="#{searchBean.categories}" var="c">
-                                    <p:menuitem ajax="false" value="#{c.name}" action="#{searchBean.SubmitCategory}">
-                                        <f:param name="category_id" value="#{c.id}" />
-                                        <f:param name="category_name" value="#{c.name}" />
-                                    </p:menuitem>
-                                </c:forEach>
-                            </p:submenu>
-                        </p:menu>
-                    </h:form>
+            <h:form>
+                <p:panelGrid columns="2" style="margin-bottom: 10px;">  
+                    <h:outputLabel for="cerca" value="Cerca " />  
+                    <p:inputText id="cerca" value="#{searchBean.query}" required="true" label="cerca" />  
+
+                    <f:facet name="footer"> 
+                        <p:commandButton ajax="false" value="Cerca" action="#{searchBean.SubmitQuery}"/>  
+                    </f:facet>  
+                </p:panelGrid>
+                <p:menu>
+                    <p:submenu label="Categoria">
+                        <c:forEach items="#{searchBean.categories}" var="c">
+                            <p:menuitem ajax="false" value="#{c.name}" action="#{searchBean.SubmitCategory}">
+                                <f:param name="category_id" value="#{c.id}" />
+                                <f:param name="category_name" value="#{c.name}" />
+                            </p:menuitem>
+                        </c:forEach>
+                    </p:submenu>
+                </p:menu>
+                
+            </h:form>
         </ui:composition>
     </body>
 </html>

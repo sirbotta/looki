@@ -13,6 +13,11 @@ and open the template in the editor.
         <ui:composition>
             <h:form id="submitAuction">
                 <p:panelGrid columns="2">  
+
+                    <f:facet name="header">
+                        <h:outputLabel value="Nuova asta" />  
+                    </f:facet> 
+
                     <h:outputLabel for="descrizione" value="Descrizione " />  
                     <p:inputText id="descrizione" value="#{insertAuctionBean.description}" required="true" label="Descrizione" /> 
 

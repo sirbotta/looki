@@ -35,87 +35,31 @@
                     <p:tabView id="tabView">
 
                         <p:tab id="tab1" title="Tutte le mie Aste">
-                            <h:form>
-
-                                <p:dataTable id="dataTable" var="a" value="#{searchBean.result}"
-                                             paginator="true" rows="10"
-                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5,10,15">
-                                    <f:facet name="header">
-                                        Le mie Offerte
-                                    </f:facet>
-
-                                    <p:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Descrizione" />
-                                        </f:facet>
-                                        <h:outputText value="#{a.description}" />
-                                    </p:column>
-
-                                    <p:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Scadenza" />
-                                        </f:facet>
-                                        <h:outputText class="timer" value="#{a.due_date}" />
-                                    </p:column>
-
-                                    <p:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Prezzo iniziale" />
-                                        </f:facet>
-                                        <h:outputText value="#{a.initial_price}"  />
-                                    </p:column>
-
-                                    <p:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Prezzo attuale" />
-                                        </f:facet>
-                                        <h:outputText value="#{a.actual_price}" />
-                                    </p:column>
-
-                                    <p:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Incremento Minimo" />
-                                        </f:facet>
-                                        <h:outputText value="#{a.min_increment}" />
-                                    </p:column>
-
-                                    <p:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Vincitore attuale" />
-                                        </f:facet>
-                                        <h:outputText value="#{dbmanager.findUsernameById(a.winner_id)}" />
-                                    </p:column>
-
-
-
-                                    <p:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="Visualizza Storico " />
-                                        </f:facet>
-                                        <h:commandLink action="auctionPageStory" value="visualizza">
-                                            <!--
-                                            <f:setPropertyActionListener value="#{a}" 
-                                                                         target="#{auctionBean.auction}" /> 
-                                            -->
-                                        </h:commandLink>
-                                    </p:column>
-
-                                </p:dataTable>
-
-                            </h:form>
+                            <ui:insert name="form-tab1" >
+                                <ui:include src="/template/common/auctionTab1.xhtml">
+                                </ui:include>
+                            </ui:insert>
                         </p:tab>
 
                         <p:tab id="tab2" title="Le mie aste con puntate">
-
+                            <ui:insert name="form-tab2" >
+                                <ui:include src="/template/common/auctionTab2.xhtml">
+                                </ui:include>
+                            </ui:insert>
                         </p:tab>
 
                         <p:tab id="tab3" title="Le mie aste senza puntate">
-
+                            <ui:insert name="form-tab3" >
+                                <ui:include src="/template/common/auctionTab3.xhtml">
+                                </ui:include>
+                            </ui:insert>
                         </p:tab>
 
                         <p:tab id="tab4" title="Le mie aste concluse">
-
+                            <ui:insert name="form-tab4" >
+                                <ui:include src="/template/common/auctionTab4.xhtml">
+                                </ui:include>
+                            </ui:insert>
                         </p:tab>
 
                     </p:tabView>
