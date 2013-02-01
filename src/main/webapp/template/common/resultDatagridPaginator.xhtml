@@ -24,7 +24,9 @@ and open the template in the editor.
                                 <f:setPropertyActionListener value="#{a}" 
                                                              target="#{auctionBean.auction}" /> 
                             </h:commandLink>
-                            <h:outputText class="timer" value="#{a.due_date}"/>
+                            <h:outputText value="#{a.due_date}" style="font-weight:bold">
+                            <f:converter converterId="dueDateConverter" />
+                        </h:outputText>
                             <h:outputText value="#{a.actual_price}" style="font-weight:bold">
                                 <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
                             </h:outputText>

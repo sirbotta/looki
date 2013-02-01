@@ -29,7 +29,9 @@ and open the template in the editor.
                         <f:facet name="header">
                             <h:outputText value="Scadenza" />
                         </f:facet>
-                        <h:outputText class="timer" value="#{a.due_date}" />
+                        <h:outputText value="#{a.due_date}" >
+                            <f:converter converterId="dueDateConverter" />
+                        </h:outputText>
                     </p:column>
 
                     <p:column>
