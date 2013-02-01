@@ -77,9 +77,11 @@ public class AuctionBean implements Serializable {
         if (min_increment >= minimo) {
             return "confirmPage";
         } else {
-            FacesMessage fm = new FacesMessage("Offerta troppo bassa");
-            FacesContext.getCurrentInstance().addMessage("Errore", fm);
-            return "picche";
+
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_WARN, "ATTENZIONE", "Offerta troppo bassa");
+            FacesContext.getCurrentInstance().addMessage(null, fm);
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+            return "auctionPage";
         }
     }
 
@@ -90,9 +92,10 @@ public class AuctionBean implements Serializable {
         User u = authBean.getUser();
 
         if (u.getId() == auction.getUser_id()) {
-            FacesMessage fm = new FacesMessage("Non puoi puntare alle tue aste!");
-            FacesContext.getCurrentInstance().addMessage("Errore", fm);
-            return "picche";
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_WARN, "ATTENZIONE", "Non puoi puntare alle tue aste!");
+            FacesContext.getCurrentInstance().addMessage(null, fm);
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+            return "auctionPage";
         }
 
 
@@ -105,17 +108,18 @@ public class AuctionBean implements Serializable {
         if (bestAuction_Bid != null) {
             //controllo se l'utente è lo stesso e se tenta di puntare più basso
             if (u.getId() == bestAuction_Bid.getUser_id() && bid_value <= bestAuction_Bid.getOffer()) {
-                FacesMessage fm = new FacesMessage("Sei già il miglior offerente e la tua offerta è più bassa della precedente");
-                FacesContext.getCurrentInstance().addMessage("Errore", fm);
-                return "picche";
+                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_WARN, "ATTENZIONE", "Sei già il miglior offerente e la tua offerta è più bassa della precedente");
+                FacesContext.getCurrentInstance().addMessage(null, fm);
+                FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+                return "auctionPage";
             } else if (u.getId() == auction.getWinner_id() && bid_value > bestAuction_Bid.getOffer())//altrimenti miglioro la mia best bid senza incrementi
             {
                 dbmanager.insertBid(u.getId(), auction_id, bid_value);
                 return "auctionPage";
 
             }
-            
-            
+
+
             //inserisco la puntata e controllo che ci sia in db
             if (dbmanager.insertBid(u.getId(), auction_id, bid_value) != 0) {
 
@@ -136,6 +140,9 @@ public class AuctionBean implements Serializable {
                         auction.setWinner_id(u.getId());
                         auction.setActual_price(bid_value);
                         setMin_increment(roundToCent(auction.getMin_increment() + bid_value));
+                        FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "INFO", "Complimenti attualmente sei il vincitore");
+                        FacesContext.getCurrentInstance().addMessage(null, fm);
+                        FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
                         return "auctionPage";
                     }
                 } else//altrimenti se è minore aggiorno con la best incrementata del min
@@ -156,6 +163,9 @@ public class AuctionBean implements Serializable {
                         auction.setWinner_id(bestAuction_Bid.getUser_id());
                         auction.setActual_price(bid_value);
                         setMin_increment(roundToCent(auction.getMin_increment() + bid_value));
+                        FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_WARN, "ATTENZIONE", "Non sei il miglior Offerente");
+                        FacesContext.getCurrentInstance().addMessage(null, fm);
+                        FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
                         return "auctionPage";
                     }
                 }
@@ -183,15 +193,20 @@ public class AuctionBean implements Serializable {
                     auction.setActual_price(bid_value);
                     setMin_increment(roundToCent(auction.getMin_increment() + bid_value));
 
+                    FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "INFO", "Complimenti attualmente sei il vincitore");
+                    FacesContext.getCurrentInstance().addMessage(null, fm);
+                    FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+
                     return "auctionPage";
                 }
             }
         }
 
-        FacesMessage fm = new FacesMessage("Qualcosa è andato storto, riprovare");
-        FacesContext.getCurrentInstance().addMessage("Errore", fm);
+        FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", "Qualcosa è andato storto, riprovare");
+        FacesContext.getCurrentInstance().addMessage(null, fm);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
 
-        return "picche";
+        return "auctionPage";
     }
 
     /**

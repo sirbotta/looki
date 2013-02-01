@@ -5,7 +5,6 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
-    <f:event listener="#{authBean.isLogged}" type="preRenderView" />
     <h:head>
         <title>Login</title> 
         <link rel="stylesheet" type="text/css" href="./resources/css/style.css"/>
@@ -33,11 +32,41 @@
             <div id="right-container">
                 <div class="right-box">
                     <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                      <ui:insert name="confirm" >
-                        <ui:include src="/template/common/confirmAuction.xhtml">
+                    <ui:insert name="auction" >
+                        <ui:include src="/template/common/auction.xhtml">
                         </ui:include>
                     </ui:insert>
-                 
+
+                    <!-- pezzo hard coded da fixare, solo per esempio -->
+                    <p:dataTable id="dataTable" var="a" value="#{auctionBean.auction_bid_story}"
+                                 paginator="true" rows="10"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
+
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nome offerente" />
+                            </f:facet>
+                            <h:outputText value="#{dbmanager.findUsernameById(a.user_id)}" />
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Offerta" />
+                            </f:facet>
+                            <h:outputText value="#{a.offer}" />
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Data" />
+                            </f:facet>
+                            <h:outputText value="#{a.bid_date}" />
+                        </p:column>
+
+
+                    </p:dataTable>
                 </div>
             </div>
         </div>

@@ -4,6 +4,7 @@
  */
 package it.malbot.greenbay.beans;
 
+import it.malbot.greenbay.helper.RedirectNavigationHandler;
 import it.malbot.greenbay.model.User;
 import java.io.Serializable;
 import java.sql.SQLException;
@@ -63,8 +64,9 @@ public class AuthBean implements Serializable {
         user = dbmanager.findUser(username, password);
         if (user == null) {
             password = null;
-            FacesMessage fm = new FacesMessage("Username o password errati");
-            FacesContext.getCurrentInstance().addMessage("Errore", fm);
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_WARN, "ATTENZIONE", "Username o password errati");
+            FacesContext.getCurrentInstance().addMessage(null, fm);
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
             return "forceLoginPage";
         }
         if (user.isAdmin_role()) {
@@ -79,6 +81,10 @@ public class AuthBean implements Serializable {
         password = null;
         username = null;
 
+
+        FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "INFO", "Logout effettuato con successo");
+        FacesContext.getCurrentInstance().addMessage(null, fm);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
         return "forceLoginPage";
     }
 
@@ -87,6 +93,14 @@ public class AuthBean implements Serializable {
             return "Ciao ospite";
         } else {
             return "Ciao " + user.getUsername();
+        }
+    }
+
+    public boolean checkUser() {
+        if (user == null) {
+            return false;
+        } else {
+            return true;
         }
     }
 
@@ -116,9 +130,10 @@ public class AuthBean implements Serializable {
 
         if (user == null && user.isAdmin_role()) {
             FacesContext fc = FacesContext.getCurrentInstance();
-            FacesMessage fm = new FacesMessage("Utente non amministratore");
-            FacesContext.getCurrentInstance().addMessage("Errore", fm);
-
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_WARN, "ATTENZIONE", "Utente non amministratore");
+            FacesContext.getCurrentInstance().addMessage(null, fm);
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+            
             ConfigurableNavigationHandler nav = (ConfigurableNavigationHandler) fc.getApplication().getNavigationHandler();
 
             nav.performNavigation("forceLoginPage");
@@ -130,11 +145,13 @@ public class AuthBean implements Serializable {
 
         if (user == null) {
             FacesContext fc = FacesContext.getCurrentInstance();
-            FacesMessage fm = new FacesMessage("Bisogna effettuare il login prima di eseguire l'azione");
-            FacesContext.getCurrentInstance().addMessage("Errore", fm);
-            ConfigurableNavigationHandler nav = (ConfigurableNavigationHandler) fc.getApplication().getNavigationHandler();
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_WARN, "ATTENZIONE", "Bisogna effettuare il login prima di eseguire l'azione");
+            FacesContext.getCurrentInstance().addMessage(null, fm);
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+            //ConfigurableNavigationHandler nav = (ConfigurableNavigationHandler) fc.getApplication().getNavigationHandler();
+            RedirectNavigationHandler nav = (RedirectNavigationHandler) fc.getApplication().getNavigationHandler();
+            nav.performNavigation("forceLoginPage");///da cambiare con forceloginpoi
 
-            nav.performNavigation("forceLoginPage");
         }
     }
 }

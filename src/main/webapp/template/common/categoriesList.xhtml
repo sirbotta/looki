@@ -21,6 +21,8 @@ and open the template in the editor.
                         <p:commandButton ajax="false" value="Cerca" action="#{searchBean.SubmitQuery}"/>  
                     </f:facet>  
                 </p:panelGrid>
+            </h:form>
+            <h:form>
                 <p:menu>
                     <p:submenu label="Categoria">
                         <c:forEach items="#{searchBean.categories}" var="c">
@@ -31,7 +33,7 @@ and open the template in the editor.
                         </c:forEach>
                     </p:submenu>
                 </p:menu>
-                
+
             </h:form>
         </ui:composition>
     </body>

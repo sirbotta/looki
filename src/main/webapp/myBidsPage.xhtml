@@ -5,6 +5,7 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
+    <f:event listener="#{authBean.isLogged}" type="preRenderView" />
     <h:head>
         <title>Le mie puntate</title> 
         <link rel="stylesheet" type="text/css" href="./resources/css/style.css"/>
@@ -31,7 +32,9 @@
             </div>
             <div id="right-container">
                 <div class="right-box">
-                    <f:event listener="#{authBean.isLogged}" type="preRenderView" />
+                    
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                    
                     <p:tabView id="tabView">
 
                         <p:tab id="tab1" title="Tutte le mie offerte">

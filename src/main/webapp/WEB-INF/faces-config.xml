@@ -4,5 +4,6 @@
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
  <application>
   <el-resolver>it.malbot.greenbay.helper.CustomScopeELResolver</el-resolver>
+  <navigation-handler>it.malbot.greenbay.helper.RedirectNavigationHandler</navigation-handler>
  </application>
 </faces-config>

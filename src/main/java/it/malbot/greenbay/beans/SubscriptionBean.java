@@ -7,9 +7,11 @@ package it.malbot.greenbay.beans;
 import it.malbot.greenbay.model.User;
 import java.io.Serializable;
 import java.sql.SQLException;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.mail.MessagingException;
 
 /**
@@ -18,28 +20,23 @@ import javax.mail.MessagingException;
  */
 @ManagedBean
 @RequestScoped
-public class SubscriptionBean implements Serializable{
+public class SubscriptionBean implements Serializable {
 
     /**
      * Creates a new instance of SubscriptionBean
      */
     @ManagedProperty(value = "#{dbmanager}")
     private DbmanagerBean dbmanager;
-    
     @ManagedProperty(value = "#{mailer}")
     private MailerBean mailer;
-    
-    private String username,password,mail,address;
-    
-    
+    private String username, password, mail, address;
+
     /**
      * @param dbmanager the dbmanager to set
      */
     public void setDbmanager(DbmanagerBean dbmanager) {
         this.dbmanager = dbmanager;
     }
-
-    
 
     /**
      * @return the username
@@ -103,31 +100,27 @@ public class SubscriptionBean implements Serializable{
     public void setMailer(MailerBean mailer) {
         this.mailer = mailer;
     }
-    
-    
-    public String Subscript() throws SQLException, MessagingException
-    {    
+
+    public String Subscript() throws SQLException, MessagingException {
         User u = new User();
         u.setUsername(username);
         u.setPassword(password);
         u.setMail(mail);
         u.setAddress(address);
-        
-        String welcome_message=
-            "Benvenuto "+u.getUsername()+" in Green bay ";
-        if(dbmanager.insertUser(u)!=0){
-            mailer.SendMail(u.getMail(), "Registrazione GREENbay", welcome_message);
-            return "forceLoginPage";
-        }
-        else
-        {
-            return "subscriptionPage";
-        }           
-    }
 
-    
-    
-    
-    
-    
+        String welcome_message =
+                "Benvenuto " + u.getUsername() + " in Green bay ";
+        if (dbmanager.insertUser(u) != 0) {
+            mailer.SendMail(u.getMail(), "Registrazione GREENbay", welcome_message);
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "INFO", "Complimenti ora sei iscritto,procedi facendo il login");
+            FacesContext.getCurrentInstance().addMessage(null, fm);
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+            return "forceLoginPage";
+        } else {
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", "Qualcosa è andato storto, riprovare");
+            FacesContext.getCurrentInstance().addMessage(null, fm);
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+            return "subscriptionPage";
+        }
+    }
 }

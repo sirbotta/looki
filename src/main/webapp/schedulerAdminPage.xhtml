@@ -8,6 +8,9 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
+        <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+        <h:messages showDetail="true"></h:messages>
+        
         <f:event listener="#{scheduler.fill_list}" type="preRenderView" />
     <h:form>
 	<p:dataTable value="#{scheduler.quartzJobList}" var="quartz">

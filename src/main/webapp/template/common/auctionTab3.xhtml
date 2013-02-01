@@ -47,7 +47,7 @@ and open the template in the editor.
 
                     <p:column>
                         <f:facet name="header">
-                            <h:outputText value="Incremento Minimo" />
+                            <h:outputText value="Incremento" />
                         </f:facet>
                         <h:outputText value="#{a.min_increment}" />
                     </p:column>
@@ -63,13 +63,13 @@ and open the template in the editor.
 
                     <p:column>
                         <f:facet name="header">
-                            <h:outputText value="Visualizza Storico " />
+                            <h:outputText value="Storico" />
                         </f:facet>
-                        <h:commandLink action="auctionPageStory" value="visualizza">
-                            <!--
+                        <h:commandLink action="#{auctionBean.goToAuctionStoryPage()}" value="visualizza">
+                            
                             <f:setPropertyActionListener value="#{a}" 
                                                          target="#{auctionBean.auction}" /> 
-                            -->
+                            
                         </h:commandLink>
                     </p:column>
 

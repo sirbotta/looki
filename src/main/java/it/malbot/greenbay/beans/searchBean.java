@@ -155,15 +155,17 @@ public class searchBean implements Serializable {
             setResult1(dbmanager.getAuctionByUserIdWithBids(authBean.getUser().getId()));
             setResult2(dbmanager.getAuctionByUserIdWithoutBids(authBean.getUser().getId()));
             setResult3(dbmanager.getAuctionClosedByUserId(authBean.getUser().getId()));
-            
+        }  
             return "myAuctionPage";
+        
+        /*
         } else {
             FacesMessage fm = new FacesMessage("Bisogna effettuare il login");
             FacesContext.getCurrentInstance().addMessage("Errore", fm);
             
-            return "login";
+            return "forceLoginPage";
         }
-        //TODO fillare il result
+        *///TODO fillare il result
         
     }
 
@@ -173,13 +175,14 @@ public class searchBean implements Serializable {
             setResult1(dbmanager.getAuctionByBidderIdWinner(authBean.getUser().getId()));
             setResult2(dbmanager.getAuctionByBidderIdLoser(authBean.getUser().getId()));
             setResult3(dbmanager.getAuctionClosedByBidderId(authBean.getUser().getId()));
-            
+        }
             return "myBidsPage";
+            /*
         } else {
             FacesMessage fm = new FacesMessage("Bisogna effettuare il login");
             FacesContext.getCurrentInstance().addMessage("Errore", fm);
-            return "login";
-        }
+            return "forceLoginPage";
+        }*/
     }
 
     /**
