@@ -12,10 +12,12 @@ and open the template in the editor.
     <body>        
         <ui:composition>
             <h:form>
-                <p:dataGrid var="a" value="#{searchBean.result}" columns="3"
+                <p:carousel var="a" value="#{searchBean.result}" rows="3" autoPlayInterval="5000" 
+         effect="easeInStrong" vertical="false" circular="true" headerText="Aste in scadenza">
+        <!--<p:dataGrid var="a" value="#{searchBean.result}" columns="3"
                             rows="6" paginator="false"
                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                            rowsPerPageTemplate="6,9,12,15" >
+                            rowsPerPageTemplate="6,9,12,15" >-->
 
                     <p:panel  >
                         <f:facet name="header">
@@ -28,7 +30,7 @@ and open the template in the editor.
                             </h:commandLink>
                         </f:facet>
 
-                        <h:panelGrid columns="1" style="width:100%" >
+                        <h:panelGrid columns="1" style="width:100%" cellpadding="5">
                             <h:commandLink action="#{auctionBean.goToAuctionPage()}">
                                 <p:graphicImage height="200px" width="200px" value="./resources/img/#{a.url_image}"/>
                                 <f:setPropertyActionListener value="#{a}" 
@@ -45,8 +47,8 @@ and open the template in the editor.
 
                         </h:panelGrid>
                     </p:panel>
-
-                </p:dataGrid>
+                    </p:carousel>
+                <!--</p:dataGrid>-->
             </h:form>
         </ui:composition>
     </body>

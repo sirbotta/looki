@@ -6,11 +6,17 @@ and open the template in the editor.
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui">
     <body>
-        <ui:composition>
-           <p:graphicImage value="./resources/img/logoS.png" id="logo"/>
-        </ui:composition>
         
+        <ui:composition>
+            <h:form id="logo">
+                <p:commandLink ajax="false"  action="landingPage">
+                    <p:graphicImage value="./resources/img/logoS.png" style="width: 180px"/>
+                </p:commandLink>
+            </h:form>
+        </ui:composition>
+
     </body>
 </html>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <body>        
+        <ui:composition>
+            <p:panelGrid columns="2">  
+                <f:facet name="header"> 
+                    Entrate
+                </f:facet> 
+
+                <h:outputLabel for="ea" value="Aste" />  
+                <h:outputText id="ea" value="#{searchBean.earn_from_auctions}" >
+                    <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
+                </h:outputText>
+
+                <f:facet name="footer"> 
+                    <h:outputLabel for="tote" value="TOT " />  
+                    <h:outputText id="tote" value="#{searchBean.earn_from_auctions}" style="color:green" >
+                        <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
+                    </h:outputText>
+                </f:facet>  
+            </p:panelGrid>
+            <br/>
+
+            <p:panelGrid columns="2">  
+                <f:facet name="header"> 
+                    Uscite
+                </f:facet> 
+
+                <h:outputLabel for="tp" value="Tasse" />  
+                <h:outputText id="tp" value="#{searchBean.taxes_to_pay}" >
+                    <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
+                </h:outputText>
+
+                <h:outputLabel for="ap" value="Acquisti" />  
+                <h:outputText id="ap" value="#{searchBean.auctions_to_pay}" >
+                    <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
+                </h:outputText>
+
+                <f:facet name="footer"> 
+                    <h:outputLabel for="totu" value="TOT " />  
+                    <h:outputText id="totu" value="#{searchBean.taxes_to_pay+searchBean.auctions_to_pay}" style="color:red">
+                        <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
+                    </h:outputText>
+                </f:facet>  
+            </p:panelGrid>
+
+
+
+        </ui:composition>
+    </body>
+</html>

@@ -24,7 +24,7 @@ INSERT INTO AUCTIONS (USER_ID,DESCRIPTION,CATEGORY_ID,INITIAL_PRICE,MIN_INCREMEN
 (4,'Lenticchie',2,12,1.2,12,'na.jpg',7,'2013-02-11 13:03:20'),
 (4,'Farro',2,7,0.34,7,'na.jpg',9,'2013-02-9 14:43:20'),
 (5,'Mele',3,9,0.50,9,'mela.jpg',12,'2013-02-11 12:03:20'),
-(5,'Arance',3,6,0.70,6,'arancia,jpg',34,'2013-02-11 19:03:20'),
+(5,'Arance',3,6,0.70,6,'arancia.jpg',34,'2013-02-11 19:03:20'),
 (5,'Fragole',3,4,0.45,4,'fragole.jpg',12,'2013-02-7 11:43:20'),
 (6,'Kiwi',3,9,1,9,'kiwi.jpg',6,'2013-02-11 23:03:20'),
 (6,'Banane',3,3,1.23,3,'banane.jpg',7,'2013-02-12 18:03:20'),

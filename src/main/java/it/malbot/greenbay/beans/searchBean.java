@@ -6,6 +6,7 @@ package it.malbot.greenbay.beans;
 
 import it.malbot.greenbay.model.Auction;
 import it.malbot.greenbay.model.Category;
+import it.malbot.greenbay.model.Sell;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
@@ -47,6 +48,8 @@ public class searchBean implements Serializable {
     private List<Auction> result2;//variabile in base alle query
     private List<Auction> result3;//variabile in base alle query
     private List<Category> categories;//fisso
+    private double taxes_to_pay = 0, auctions_to_pay = 0, deliveries_to_pay = 0, earn_from_auctions = 0;
+    private List<Sell> sell_result;
 
     @PostConstruct
     public void init() throws SQLException {
@@ -54,8 +57,6 @@ public class searchBean implements Serializable {
         //    conversation.begin();
         //}
         setCategories(dbmanager.getCategories());
-
-
     }
 
     /*
@@ -155,18 +156,18 @@ public class searchBean implements Serializable {
             setResult1(dbmanager.getAuctionByUserIdWithBids(authBean.getUser().getId()));
             setResult2(dbmanager.getAuctionByUserIdWithoutBids(authBean.getUser().getId()));
             setResult3(dbmanager.getAuctionClosedByUserId(authBean.getUser().getId()));
-        }  
-            return "myAuctionPage";
-        
-        /*
-        } else {
-            FacesMessage fm = new FacesMessage("Bisogna effettuare il login");
-            FacesContext.getCurrentInstance().addMessage("Errore", fm);
-            
-            return "forceLoginPage";
         }
-        *///TODO fillare il result
-        
+        return "myAuctionPage";
+
+        /*
+         } else {
+         FacesMessage fm = new FacesMessage("Bisogna effettuare il login");
+         FacesContext.getCurrentInstance().addMessage("Errore", fm);
+            
+         return "forceLoginPage";
+         }
+         *///TODO fillare il result
+
     }
 
     public String goToMyBids() throws SQLException {
@@ -176,13 +177,40 @@ public class searchBean implements Serializable {
             setResult2(dbmanager.getAuctionByBidderIdLoser(authBean.getUser().getId()));
             setResult3(dbmanager.getAuctionClosedByBidderId(authBean.getUser().getId()));
         }
-            return "myBidsPage";
-            /*
-        } else {
-            FacesMessage fm = new FacesMessage("Bisogna effettuare il login");
-            FacesContext.getCurrentInstance().addMessage("Errore", fm);
-            return "forceLoginPage";
-        }*/
+        return "myBidsPage";
+        /*
+         } else {
+         FacesMessage fm = new FacesMessage("Bisogna effettuare il login");
+         FacesContext.getCurrentInstance().addMessage("Errore", fm);
+         return "forceLoginPage";
+         }*/
+    }
+
+    public String goToMySummary() throws SQLException {
+        if (authBean.getUser() != null) {
+            taxes_to_pay = 0;
+            earn_from_auctions = 0;
+            auctions_to_pay = 0;
+            deliveries_to_pay = 0;
+
+            sell_result = dbmanager.getSellBySeller_id(authBean.getUser().getId());
+            for (Sell s : sell_result) {
+                taxes_to_pay += s.getTax();
+                earn_from_auctions += s.getFinal_price();
+            }
+
+
+            setResult(dbmanager.getAuctionClosedByBidderId(authBean.getUser().getId()));
+            for (Auction a : result0) {
+                auctions_to_pay += a.getActual_price();
+                deliveries_to_pay += a.getDelivery_price();
+            }
+
+
+
+        }
+
+        return "summaryPage";
     }
 
     /**
@@ -246,5 +274,61 @@ public class searchBean implements Serializable {
      */
     public void setResult3(List<Auction> result3) {
         this.result3 = result3;
+    }
+
+    /**
+     * @return the taxes_to_pay
+     */
+    public double getTaxes_to_pay() {
+        return taxes_to_pay;
+    }
+
+    /**
+     * @param taxes_to_pay the taxes_to_pay to set
+     */
+    public void setTaxes_to_pay(double taxes_to_pay) {
+        this.taxes_to_pay = taxes_to_pay;
+    }
+
+    /**
+     * @return the auctions_to_pay
+     */
+    public double getAuctions_to_pay() {
+        return auctions_to_pay;
+    }
+
+    /**
+     * @param auctions_to_pay the auctions_to_pay to set
+     */
+    public void setAuctions_to_pay(double auctions_to_pay) {
+        this.auctions_to_pay = auctions_to_pay;
+    }
+
+    /**
+     * @return the earn_from_auctions
+     */
+    public double getEarn_from_auctions() {
+        return earn_from_auctions;
+    }
+
+    /**
+     * @param earn_from_auctions the earn_from_auctions to set
+     */
+    public void setEarn_from_auctions(double earn_from_auctions) {
+        this.earn_from_auctions = earn_from_auctions;
+    }
+
+    /**
+     * @return the sell_result
+     */
+    public List<Sell> getSell_result() {
+        return sell_result;
+    }
+
+    /**
+     * @param sell_result the sell_result to set
+     */
+    public void setSell_result(List<Sell> sell_result) {
+        this.sell_result = sell_result;
     }
 }

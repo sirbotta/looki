@@ -7,11 +7,11 @@
 */
 
 body{
-	width: 100%;
-	height: 100%;
-	margin:0;
-	padding:0;
-        font-family: "arial";
+    width: 100%;
+    height: 100%;
+    margin:0;
+    padding:0;
+    font-family: "arial";
 }
 
 #header{
@@ -52,7 +52,7 @@ body{
 }
 
 tbody{
-            font-size: 10pt;
+    font-size: 10pt;
 }
 
 #fake{
@@ -69,10 +69,22 @@ a{
 }
 
 .ui-menubar{
-    width:60%;
-    padding-left: 40%;
+    width:65%;
+    padding-left: 35%;
 }
 
 #tbl{
     min-width: 700px;
+}
+
+/*
+.ui-fileupload .start {
+    display: none;
+}
+.ui-fileupload .cancel {
+    display: none;
+}
+*/
+.ui-fileupload .progress {
+    display: none;
 }

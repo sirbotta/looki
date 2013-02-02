@@ -825,6 +825,36 @@ public class DbmanagerBean implements Serializable {
         }
         return sellList;
     }
+    
+    public List<Sell> getSellBySeller_id(int seller_id) throws SQLException{
+        List<Sell> sellList = new ArrayList<Sell>();
+        PreparedStatement stm = con.prepareStatement(
+                "SELECT * FROM SELLS WHERE SELLS.seller_id = ? ORDER BY SELLS.sell_date DESC");
+        stm.setInt(1, seller_id);
+        try {
+            ResultSet rs = stm.executeQuery();
+            try {
+                while (rs.next()) {
+                    Sell sell = new Sell();
+
+                    sell.setId(rs.getInt("id"));
+                    sell.setAuction_id(rs.getInt("auction_id"));
+                    sell.setSeller_id(rs.getInt("seller_id"));
+                    sell.setBuyer_id(rs.getInt("buyer_id"));
+                    sell.setSell_date(rs.getTimestamp("sell_date"));
+                    sell.setFinal_price(rs.getDouble("final_price"));
+                    sell.setTax(rs.getDouble("tax"));
+
+                    sellList.add(sell);
+                }
+            } finally {
+                rs.close();
+            }
+        } finally {
+            stm.close();
+        }
+        return sellList;
+    }
 
     public Auction findAuctionById(int auction_id) throws SQLException {
         PreparedStatement stm = con.prepareStatement(

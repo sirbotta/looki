@@ -11,7 +11,7 @@ and open the template in the editor.
       xmlns:p="http://primefaces.org/ui">
     <body>        
         <ui:composition>
-            <h:form id="submitAuction">
+            <h:form id="submitAuction" enctype="multipart/form-data">
                 <p:panelGrid columns="2">  
 
                     <f:facet name="header">
@@ -46,13 +46,17 @@ and open the template in the editor.
                     <h:outputLabel for="spSped" value="Spese di spedizione" />  
                     <p:inputText id="spSped" value="#{insertAuctionBean.delivery_price}" required="true" label="Spese di spedizione">
                         <f:validateDoubleRange minimum="0" />
-                    </p:inputText>              
+                    </p:inputText>
+                    <h:outputLabel for="img" value="Immagine (facoltativa)" />
+                    <p:fileUpload id="img" value="#{insertAuctionBean.file}" mode="simple" />
 
                     <f:facet name="footer"> 
                         <p:commandButton ajax="false" value="Crea" action="#{insertAuctionBean.submitNewAuction()}"/>   
                     </f:facet>  
                 </p:panelGrid>
             </h:form>
+
+            
         </ui:composition>
     </body>
 </html>

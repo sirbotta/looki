@@ -16,6 +16,7 @@ and open the template in the editor.
             <h:form>
                 <p:menubar>  
                     <p:menuitem ajax="false" value="Home" action="landingPage" />  
+                    <p:menuitem ajax="false" value="Riepilogo" action="#{searchBean.goToMySummary()}" />
                     <p:menuitem ajax="false" value="Le mie aste" action="#{searchBean.goToMyAuctions()}" />  
                     <p:menuitem ajax="false" value="Le mie puntate" action="#{searchBean.goToMyBids()}" />   
                     <c:if test="#{authBean.checkUser()}">
@@ -28,8 +29,13 @@ and open the template in the editor.
                 </p:menubar> 
             </h:form>
             <c:if test="#{authBean.checkUser()}">
-                <h:outputText value="Benvenuto #{authBean.user.username}!" style="float:right; margin-right:50px;"/>
+                <h:form style="float:right; position: absolute; top:0; left:5;">
+
+                    <h:outputText value="Benvenuto, #{authBean.user.username}(#{authBean.user.mail})! " />
+                    <p:commandLink ajax="false" value="Esci" action="#{authBean.InvalidateUser()}" />
+                </h:form>
             </c:if>
+
         </ui:composition>
     </body>
 </html>

@@ -13,6 +13,10 @@ and open the template in the editor.
         <ui:composition>
             <h:form id="login">
                 <p:panelGrid columns="2">  
+                    <f:facet name="header"> 
+                        Iscrizione
+                    </f:facet>  
+                    
                     <h:outputLabel for="username" value="Username "/>  
                     <p:inputText id="username" value="#{subscriptionBean.username}" required="true" label="Username" />  
                     
@@ -22,7 +26,7 @@ and open the template in the editor.
                         <f:attribute name="confirmPassword" value="#{confirmPassword}"/>
                     </p:password>
                     
-                    <h:outputLabel for="cnfPwd" value="Confirm Password "  />  
+                    <h:outputLabel for="cnfPwd" value="Conferma Password "  />  
                     <p:password id="cnfPwd" required="true"
                                    binding="#{confirmPassword}"
                                    requiredMessage="Please enter confirm password" />
@@ -33,12 +37,12 @@ and open the template in the editor.
                         <f:attribute name="confirmEmail" value="#{confirmEmail}"/>
                     </p:inputText>
                     
-                    <h:outputLabel for="cnfEmail" value="Confirm Password "  />  
+                    <h:outputLabel for="cnfEmail" value="Conferma Mail "  />  
                     <p:inputText id="cnfEmail" required="true"
                                    binding="#{confirmEmail}"
                                    requiredMessage="Please enter confirm email" />
                     
-                    <h:outputLabel for="address" value="Username " />  
+                    <h:outputLabel for="address" value="Indirizzo " />  
                     <p:inputText id="address" value="#{subscriptionBean.address}" required="true" label="Username" /> 
 
                 

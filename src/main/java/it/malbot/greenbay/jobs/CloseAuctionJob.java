@@ -51,11 +51,11 @@ public class CloseAuctionJob implements Job, Serializable {
             //generazione di una vendita base con tasse 1.23
             sell.setSeller_id(auction.getUser_id());
             sell.setAuction_id(auction_id);
-            sell.setFinal_price(-1.23);
+            sell.setFinal_price(0);
             sell.setTax(1.23);
             System.out.println("Generato i dati base di un asta ");
             
-            //se non c'è nessun winner
+            //se c'è winner
             if(auction.getWinner_id()!=0){
             
             //prelevo il prezzo finale
