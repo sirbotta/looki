@@ -2,13 +2,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-    <f:event listener="#{authBean.isLogged}" type="preRenderView" />
     <h:head>
-        <title>Conferma Asta</title> 
-        <link rel="stylesheet" type="text/css" href="./resources/css/style.css"/>
+        <title>Risultati</title> 
+        <h:outputStylesheet library="css" name="style.css"  />
         
     </h:head>
     <h:body>
@@ -34,12 +33,13 @@
             <div id="right-container">
                 <div class="right-box">
                     <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                      <ui:insert name="confirm" >
-                        <ui:include src="/template/common/confirmAuction.xhtml">
+                    <ui:insert name="result-datagrid-pag" >
+                        <ui:include src="/template/common/resultDatagridPaginator.xhtml">
                         </ui:include>
                     </ui:insert>
-                 
+                    <h6>Ricerca per #{searchBean.category_name} #{searchBean.query}</h6>
                 </div>
+
             </div>
         </div>
     </h:body>

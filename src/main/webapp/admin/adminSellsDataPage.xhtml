@@ -8,7 +8,7 @@
     <f:event listener="#{authBean.isAdmin}" type="preRenderView" />
     <h:head>
         <title>Admin Vendite</title>
-        <link rel="stylesheet" type="text/css" href="./resources/css/style.css"/>
+        <h:outputStylesheet library="css" name="style.css"  />
     </h:head>
     <h:body>
         <div id="header">
@@ -17,7 +17,7 @@
                 </ui:include>
             </ui:insert>
             <ui:insert name="menu" >
-                <ui:include src="/template/common/adminMenu.xhtml">
+                <ui:include src="/template/common/admin/adminMenu.xhtml">
                 </ui:include>
             </ui:insert>
         </div>
@@ -27,11 +27,11 @@
                     <div class="left-box" >
                         
                         <ui:insert name="epd" >
-                            <ui:include src="/template/common/exportPageData.xhtml">
+                            <ui:include src="/template/common/admin/exportPageData.xhtml">
                             </ui:include>
                         </ui:insert>
                         <ui:insert name="ead" >
-                            <ui:include src="/template/common/exportAllData.xhtml">
+                            <ui:include src="/template/common/admin/exportAllData.xhtml">
                             </ui:include>
                         </ui:insert>                        
                         
@@ -41,7 +41,7 @@
                 <div id="right-container">
                     <div class="right-box">
                            <ui:insert name="sellTab" >
-                            <ui:include src="/template/common/sellTab.xhtml">
+                            <ui:include src="/template/common/admin/sellTab.xhtml">
                             </ui:include>
                         </ui:insert> 
                     </div>

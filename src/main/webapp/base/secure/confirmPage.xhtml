@@ -2,26 +2,31 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:event listener="#{authBean.isLogged}" type="preRenderView" />
     <h:head>
-        <title>Iscrizione</title> 
-        <link rel="stylesheet" type="text/css" href="./resources/css/style.css"/>
+        <title>Conferma Asta</title> 
+        <h:outputStylesheet library="css" name="style.css"  />
+        
     </h:head>
     <h:body>
-        <f:event listener="#{searchBean.latestResult()}" type="preRenderView" />
         <div id="header">
-            <ui:insert name="header" >
+            <ui:insert name="img" >
                 <ui:include src="/template/common/headerImg.xhtml">
+                </ui:include>
+            </ui:insert>
+            <ui:insert name="menu" >
+                <ui:include src="/template/common/menu.xhtml">
                 </ui:include>
             </ui:insert>
         </div>
         <div id="content">
             <div id="left-container">
                 <div class="left-box" >
-                    <ui:insert name="login" >
-                        <ui:include src="/template/common/subscription.xhtml">
+                    <ui:insert name="categories-list" >
+                        <ui:include src="/template/common/categoriesList.xhtml">
                         </ui:include>
                     </ui:insert>
                 </div>
@@ -29,12 +34,11 @@
             <div id="right-container">
                 <div class="right-box">
                     <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                    <ui:insert name="result-datagrid" >
-                        <ui:include src="/template/common/resultDatagridNoPaginator.xhtml">
+                      <ui:insert name="confirm" >
+                        <ui:include src="/template/common/confirmAuction.xhtml">
                         </ui:include>
                     </ui:insert>
-
-
+                 
                 </div>
             </div>
         </div>

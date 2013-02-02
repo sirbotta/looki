@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import javax.faces.bean.ManagedProperty;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -24,8 +23,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author simone
  */
-@WebFilter(filterName = "authFilter", urlPatterns = {"/lol/*"})
-public class authFilter implements Filter {
+@WebFilter(filterName = "adminFilter", urlPatterns = {"/faces/admin/*"})
+public class AdminFilter implements Filter {
 
     private static final boolean debug = true;
     // The filter configuration object we are associated with.  If
@@ -33,13 +32,13 @@ public class authFilter implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
 
-    public authFilter() {
+    public AdminFilter() {
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("authFilter:DoBeforeProcessing");
+            log("adminFilter:DoBeforeProcessing");
         }
 
         // Write code here to process the request and/or response before
@@ -68,7 +67,7 @@ public class authFilter implements Filter {
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("authFilter:DoAfterProcessing");
+            log("adminFilter:DoAfterProcessing");
         }
 
         // Write code here to process the request and/or response after
@@ -106,7 +105,7 @@ public class authFilter implements Filter {
             throws IOException, ServletException {
 
         if (debug) {
-            log("authFilter:doFilter()");
+            log("adminFilter:doFilter()");
         }
 
         doBeforeProcessing(request, response);
@@ -119,18 +118,28 @@ public class authFilter implements Filter {
                 chain.doFilter(request, response);
                 log("manca la sessione");
             } else {
-                AuthBean authBean = (AuthBean) session.getAttribute("authBean");                
+                AuthBean authBean = (AuthBean) session.getAttribute("authBean");
                 if (authBean.getUser() != null) {
                     log("Logged -> " + authBean.getUser().getUsername());
-                    chain.doFilter(request, response);
+                    if (authBean.getUser().isAdmin_role()) {
+                        log("Admin -> YES");
+                        chain.doFilter(request, response);
+                    } else {
+                        log("Admin -> NO");
+                        filterConfig.getServletContext().getRequestDispatcher("/faces/base/forceLoginPage.xhtml").forward(request, response);
+                    }
+
                 } else {
                     log("No one Logged");
-                    chain.doFilter(request, response);
+
+                    filterConfig.getServletContext().getRequestDispatcher("/faces/base/forceLoginPage.xhtml").forward(request, response);
                 }
-                
+
             }
 
-            
+
+
+
         } catch (Throwable t) {
             // If an exception is thrown somewhere down the filter chain,
             // we still want to execute our after processing, and then
@@ -183,7 +192,7 @@ public class authFilter implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {
-                log("authFilter:Initializing filter");
+                log("adminFilter:Initializing filter");
             }
         }
     }
@@ -194,9 +203,9 @@ public class authFilter implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("authFilter()");
+            return ("adminFilter()");
         }
-        StringBuffer sb = new StringBuffer("authFilter(");
+        StringBuffer sb = new StringBuffer("adminFilter(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());

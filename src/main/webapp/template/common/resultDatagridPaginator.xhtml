@@ -30,7 +30,7 @@ and open the template in the editor.
                         
                         <h:panelGrid columns="1" style="width:100%" >
                             <h:commandLink action="#{auctionBean.goToAuctionPage()}">
-                                <p:graphicImage height="200px" width="200px" value="./resources/img/#{a.url_image}"/>
+                                <p:graphicImage height="200px" width="200px" value="/resources/img/#{a.url_image}"/>
                                 <f:setPropertyActionListener value="#{a}" 
                                                              target="#{auctionBean.auction}" /> 
                             </h:commandLink>

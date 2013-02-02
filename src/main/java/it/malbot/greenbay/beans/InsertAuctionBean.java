@@ -104,7 +104,7 @@ public class InsertAuctionBean implements Serializable {
 
         }
 
-        return "landingPage";
+        return "/base/landingPage";
     }
 
     /////// parte di upload

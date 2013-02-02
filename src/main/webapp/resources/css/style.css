@@ -69,8 +69,8 @@ a{
 }
 
 .ui-menubar{
-    width:65%;
-    padding-left: 35%;
+    width:65% !important;
+    padding-left: 35% !important;
 }
 
 #tbl{

@@ -12,25 +12,25 @@ and open the template in the editor.
     <body>        
         <ui:composition>
             <h:panelGrid columns="2">
-                <p:panel header="Export Page Data">
+                <p:panel header="Export All Data">
                     <h:commandLink>
-                        <p:graphicImage value="./resources/img/excel.png" />
-                        <p:dataExporter type="xls" target="tbl" fileName="sells" pageOnly="true"/>
+                        <p:graphicImage value="/resources/img/excel.png" />
+                        <p:dataExporter type="xls" target="tbl" fileName="sells" />
                     </h:commandLink>
 
                     <h:commandLink>
-                        <p:graphicImage value="./resources/img/pdf.png" />
-                        <p:dataExporter type="pdf" target="tbl" fileName="sells" pageOnly="true"/>
+                        <p:graphicImage value="/resources/img/pdf.png" />
+                        <p:dataExporter type="pdf" target="tbl" fileName="sells"/>
                     </h:commandLink>
 
                     <h:commandLink>
-                        <p:graphicImage value="./resources/img/csv.png" />
-                        <p:dataExporter type="csv" target="tbl" fileName="sells" pageOnly="true"/>
+                        <p:graphicImage value="/resources/img/csv.png" />
+                        <p:dataExporter type="csv" target="tbl" fileName="sells" />
                     </h:commandLink>
 
                     <h:commandLink>
-                        <p:graphicImage value="./resources/img/xml.png" />
-                        <p:dataExporter type="xml" target="tbl" fileName="sells" pageOnly="true"/>
+                        <p:graphicImage value="/resources/img/xml.png" />
+                        <p:dataExporter type="xml" target="tbl" fileName="sells" />
                     </h:commandLink>
                 </p:panel>
             </h:panelGrid>

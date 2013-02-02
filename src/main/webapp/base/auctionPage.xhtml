@@ -2,17 +2,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
-
-        <h:head>
-        <title>Home</title> 
-        <link rel="stylesheet" type="text/css" href="./resources/css/style.css"/>
+    <h:head>
+        <title>Asta</title> 
+        <h:outputStylesheet library="css" name="style.css"  />
         
     </h:head>
     <h:body>
-        <f:event listener="#{searchBean.latestResult()}" type="preRenderView" />
         <div id="header">
             <ui:insert name="img" >
                 <ui:include src="/template/common/headerImg.xhtml">
@@ -32,26 +30,16 @@
                     </ui:insert>
                 </div>
             </div>
-
-           <div id="right-container">
+            <div id="right-container">
                 <div class="right-box">
-                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                    <ui:insert name="result-datagrid" >
-                        <ui:include src="/template/common/resultDatagridNoPaginator.xhtml">
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                      <ui:insert name="auction" >
+                        <ui:include src="/template/common/auction.xhtml">
                         </ui:include>
                     </ui:insert>
-
                 </div>
-           </div>
-            
-       
+            </div>
         </div>
-   
-        
-        
-        
-        
-        
     </h:body>
 </html>
 

@@ -57,7 +57,7 @@ public class AuctionBean implements Serializable {
     public String goToAuctionPage() throws SQLException {
         auction_id = auction.getId();
         setMin_increment(roundToCent(auction.getMin_increment() + auction.getActual_price()));
-        return "auctionPage";
+        return "/base/auctionPage";
     }
 
     public String goToAuctionStoryPage() throws SQLException {
@@ -67,7 +67,7 @@ public class AuctionBean implements Serializable {
 
         //trova tutte le bid sotto il prezzo attuale, così non si sanno le puntate maggiori dagli altri utenti
         setAuction_bid_story(dbmanager.getAuctionBidByAuctionIdBelowOffer(auction_id, auction.getActual_price()));
-        return "auctionStoryPage";
+        return "/base/secure/auctionStoryPage";
     }
 
     public String goToConfirmBid() throws SQLException {
@@ -75,13 +75,13 @@ public class AuctionBean implements Serializable {
         //controllo che sia la bid sia superiore o uguale al minimo imposto
         Double minimo = roundToCent(auction.getMin_increment() + auction.getActual_price());
         if (min_increment >= minimo) {
-            return "confirmPage";
+            return "/base/secure/confirmPage";
         } else {
 
             FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_WARN, "ATTENZIONE", "Offerta troppo bassa");
             FacesContext.getCurrentInstance().addMessage(null, fm);
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-            return "auctionPage";
+            return "/base/auctionPage";
         }
     }
 
@@ -95,7 +95,7 @@ public class AuctionBean implements Serializable {
             FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_WARN, "ATTENZIONE", "Non puoi puntare alle tue aste!");
             FacesContext.getCurrentInstance().addMessage(null, fm);
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-            return "auctionPage";
+            return "/base/auctionPage";
         }
 
 
@@ -111,11 +111,11 @@ public class AuctionBean implements Serializable {
                 FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_WARN, "ATTENZIONE", "Sei già il miglior offerente e la tua offerta è più bassa della precedente");
                 FacesContext.getCurrentInstance().addMessage(null, fm);
                 FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-                return "auctionPage";
+                return "/base/auctionPage";
             } else if (u.getId() == auction.getWinner_id() && bid_value > bestAuction_Bid.getOffer())//altrimenti miglioro la mia best bid senza incrementi
             {
                 dbmanager.insertBid(u.getId(), auction_id, bid_value);
-                return "auctionPage";
+                return "/base/auctionPage";
 
             }
 
@@ -143,7 +143,7 @@ public class AuctionBean implements Serializable {
                         FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "INFO", "Complimenti attualmente sei il vincitore");
                         FacesContext.getCurrentInstance().addMessage(null, fm);
                         FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-                        return "auctionPage";
+                        return "/base/auctionPage";
                     }
                 } else//altrimenti se è minore aggiorno con la best incrementata del min
                 {
@@ -166,7 +166,7 @@ public class AuctionBean implements Serializable {
                         FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_WARN, "ATTENZIONE", "Non sei il miglior Offerente");
                         FacesContext.getCurrentInstance().addMessage(null, fm);
                         FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-                        return "auctionPage";
+                        return "/base/auctionPage";
                     }
                 }
 
@@ -197,7 +197,7 @@ public class AuctionBean implements Serializable {
                     FacesContext.getCurrentInstance().addMessage(null, fm);
                     FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
 
-                    return "auctionPage";
+                    return "/base/auctionPage";
                 }
             }
         }
@@ -206,7 +206,7 @@ public class AuctionBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, fm);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
 
-        return "auctionPage";
+        return "/base/auctionPage";
     }
 
     /**

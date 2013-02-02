@@ -18,6 +18,15 @@ and open the template in the editor.
                     </f:facet>
                     <h:outputText value="#{dbmanager.findAuctionById(sell.auction_id).description}" />
                 </p:column>
+                
+                <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Data" />
+                        </f:facet>
+                    <h:outputText value="#{sell.sell_date}" >
+                            <f:converter converterId="dueDateConverter" />
+                        </h:outputText>
+                    </p:column>
 
                 <p:column>
                     <f:facet name="header">

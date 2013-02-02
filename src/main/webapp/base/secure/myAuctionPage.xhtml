@@ -2,15 +2,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
     <f:event listener="#{authBean.isLogged}" type="preRenderView" />
-
     <h:head>
-        <title>Riepilogo</title> 
-        <link rel="stylesheet" type="text/css" href="./resources/css/style.css"/>
-
+        <title>Le mie Aste</title> 
+        <h:outputStylesheet library="css" name="style.css"  />
+        
     </h:head>
     <h:body>
         <div id="header">
@@ -25,49 +24,53 @@
         </div>
         <div id="content">
             <div id="left-container">
+               
                 <div class="left-box" >
-
-                    <ui:insert name="summ-TOT" >
-                                <ui:include src="/template/common/summaryTot.xhtml">
-                                </ui:include>
-                            </ui:insert>
-
-
-
+                    <ui:insert name="submitAuction" >
+                        <ui:include src="/template/common/submitAuction.xhtml">
+                        </ui:include>
+                    </ui:insert>
                 </div>
             </div>
-
             <div id="right-container">
                 <div class="right-box">
-                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                    
+                    <p:messages id="messages"  showDetail="true" autoUpdate="true" closable="true" />
                     <p:tabView id="tabView">
 
-                        <p:tab id="tab1" title="Vendite">
+                        <p:tab id="tab1" title="Tutte le mie Aste">
                             <ui:insert name="form-tab1" >
-                                <ui:include src="/template/common/summarySellTab.xhtml">
+                                <ui:include src="/template/common/auctionTab1.xhtml">
                                 </ui:include>
                             </ui:insert>
                         </p:tab>
 
-                        <p:tab id="tab2" title="Acquisti">
+                        <p:tab id="tab2" title="Le mie aste con puntate">
                             <ui:insert name="form-tab2" >
-                                <ui:include src="/template/common/summaryWinAuctionTab.xhtml">
+                                <ui:include src="/template/common/auctionTab2.xhtml">
                                 </ui:include>
                             </ui:insert>
                         </p:tab>
+
+                        <p:tab id="tab3" title="Le mie aste senza puntate">
+                            <ui:insert name="form-tab3" >
+                                <ui:include src="/template/common/auctionTab3.xhtml">
+                                </ui:include>
+                            </ui:insert>
+                        </p:tab>
+
+                        <p:tab id="tab4" title="Le mie aste concluse">
+                            <ui:insert name="form-tab4" >
+                                <ui:include src="/template/common/auctionTab4.xhtml">
+                                </ui:include>
+                            </ui:insert>
+                        </p:tab>
+
                     </p:tabView>
 
                 </div>
             </div>
-
-
         </div>
-
-
-
-
-
-
     </h:body>
 </html>
 

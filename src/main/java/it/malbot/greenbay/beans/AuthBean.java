@@ -67,14 +67,16 @@ public class AuthBean implements Serializable {
             FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_WARN, "ATTENZIONE", "Username o password errati");
             FacesContext.getCurrentInstance().addMessage(null, fm);
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-            return "forceLoginPage";
+            return "/base/forceLoginPage";
         }
         if (user.isAdmin_role()) {
-            return "adminPage";
+            return "/admin/adminPage";
         } else {
-            return "landingPage";
+            return "/base/landingPage";
         }
     }
+    
+    
 
     public String InvalidateUser() {
         user = null;
@@ -85,7 +87,7 @@ public class AuthBean implements Serializable {
         FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "INFO", "Logout effettuato con successo");
         FacesContext.getCurrentInstance().addMessage(null, fm);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-        return "forceLoginPage";
+        return "/base/forceLoginPage";
     }
 
     public String getUserGreatings() {
@@ -136,7 +138,7 @@ public class AuthBean implements Serializable {
             //FacesContext.getCurrentInstance().getExternalContext().getFlash().doPostPhaseActions(FacesContext.getCurrentInstance());
             ConfigurableNavigationHandler nav = (ConfigurableNavigationHandler) fc.getApplication().getNavigationHandler();
 
-            nav.performNavigation("forceLoginPage");
+            nav.performNavigation("/base/forceLoginPage");
         }
     }
     //fa redirect se l'utente non è loggato
@@ -151,7 +153,7 @@ public class AuthBean implements Serializable {
             //FacesContext.getCurrentInstance().getExternalContext().getFlash().doPostPhaseActions(FacesContext.getCurrentInstance());
             //ConfigurableNavigationHandler nav = (ConfigurableNavigationHandler) fc.getApplication().getNavigationHandler();
             RedirectNavigationHandler nav = (RedirectNavigationHandler) fc.getApplication().getNavigationHandler();
-            nav.performNavigation("forceLoginPage");
+            nav.performNavigation("/base/forceLoginPage");
 
         }
     }

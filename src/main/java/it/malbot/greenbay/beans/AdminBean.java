@@ -42,7 +42,7 @@ public class AdminBean implements Serializable {
     public String goToOpenAuctions() throws SQLException {
 
         setAuctions(dbmanager.getAuctionOpen());
-        return "adminOpenAuctionPage";
+        return "/admin/adminOpenAuctionPage";
     }
 
     public String killAuction() throws SchedulerException, SQLException, MessagingException {
@@ -75,7 +75,7 @@ public class AdminBean implements Serializable {
 
     public String goToSellsData() throws SQLException {
         setSells(dbmanager.getSell());
-        return "adminSellsDataPage";
+        return "/admin/adminSellsDataPage";
     }
 
     /**

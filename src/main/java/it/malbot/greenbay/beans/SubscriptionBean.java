@@ -115,12 +115,12 @@ public class SubscriptionBean implements Serializable {
             FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "INFO", "Complimenti ora sei iscritto,procedi facendo il login");
             FacesContext.getCurrentInstance().addMessage(null, fm);
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-            return "forceLoginPage";
+            return "/base/forceLoginPage";
         } else {
             FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", "Qualcosa è andato storto, riprovare");
             FacesContext.getCurrentInstance().addMessage(null, fm);
             FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-            return "subscriptionPage";
+            return "/base/subscriptionPage";
         }
     }
 }

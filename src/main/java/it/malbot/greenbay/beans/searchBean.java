@@ -135,13 +135,13 @@ public class searchBean implements Serializable {
         category_name = paramMap.get("category_name");
         query = null;
         setResult(dbmanager.getAuctionByCategory(getCategory_id()));
-        return "resultPage";
+        return "/base/resultPage";
     }
 
     public String SubmitQuery() throws SQLException {
         category_name = null;
         setResult(dbmanager.getAuctionByQuery(getQuery()));
-        return "resultPage";
+        return "/base/resultPage";
     }
 
     public void latestResult() throws SQLException {
@@ -157,7 +157,7 @@ public class searchBean implements Serializable {
             setResult2(dbmanager.getAuctionByUserIdWithoutBids(authBean.getUser().getId()));
             setResult3(dbmanager.getAuctionClosedByUserId(authBean.getUser().getId()));
         }
-        return "myAuctionPage";
+        return "/base/secure/myAuctionPage";
 
         /*
          } else {
@@ -177,7 +177,7 @@ public class searchBean implements Serializable {
             setResult2(dbmanager.getAuctionByBidderIdLoser(authBean.getUser().getId()));
             setResult3(dbmanager.getAuctionClosedByBidderId(authBean.getUser().getId()));
         }
-        return "myBidsPage";
+        return "/base/secure/myBidsPage";
         /*
          } else {
          FacesMessage fm = new FacesMessage("Bisogna effettuare il login");
@@ -210,7 +210,7 @@ public class searchBean implements Serializable {
 
         }
 
-        return "summaryPage";
+        return "/base/secure/summaryPage";
     }
 
     /**
