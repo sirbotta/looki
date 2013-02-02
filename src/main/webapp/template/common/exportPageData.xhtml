@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <body>        
+        <ui:composition>
+            <h:panelGrid columns="2">
+                <p:panel header="Export Page Data">
+                    <h:commandLink>
+                        <p:graphicImage value="./resources/img/excel.png" />
+                        <p:dataExporter type="xls" target="tbl" fileName="sells" pageOnly="true"/>
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage value="./resources/img/pdf.png" />
+                        <p:dataExporter type="pdf" target="tbl" fileName="sells" pageOnly="true"/>
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage value="./resources/img/csv.png" />
+                        <p:dataExporter type="csv" target="tbl" fileName="sells" pageOnly="true"/>
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage value="./resources/img/xml.png" />
+                        <p:dataExporter type="xml" target="tbl" fileName="sells" pageOnly="true"/>
+                    </h:commandLink>
+                </p:panel>
+            </h:panelGrid>
+        </ui:composition>
+    </body>
+</html>

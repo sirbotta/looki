@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <body>        
+        <ui:composition>
+            <!-- pezzo hard coded da fixare, solo per esempio -->
+            <p:dataTable id="dataTable" var="a" value="#{auctionBean.auction_bid_story}"
+                         paginator="true" rows="10"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15">
+                
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Nome offerente" />
+                    </f:facet>
+                    <h:outputText value="#{dbmanager.findUsernameById(a.user_id)}" />
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Offerta" />
+                    </f:facet>
+                    <h:outputText value="#{a.offer}" />
+                </p:column>
+                
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Data" />
+                    </f:facet>
+                    <h:outputText value="#{a.bid_date}" />
+                </p:column>
+            </p:dataTable>
+        </ui:composition>
+    </body>
+</html>
