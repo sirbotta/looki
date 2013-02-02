@@ -17,7 +17,17 @@ and open the template in the editor.
                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                             rowsPerPageTemplate="6,9,12,15" >
 
-                    <p:panel header="Lotto N:#{a.id} - #{a.description}" style="text-align:center" >
+                    <p:panel>
+                        <f:facet name="header">
+                            <h:commandLink action="#{auctionBean.goToAuctionPage()}">
+                                Lotto N:#{a.id} - #{a.description}
+
+
+                                <f:setPropertyActionListener value="#{a}" 
+                                                             target="#{auctionBean.auction}" /> 
+                            </h:commandLink>
+                        </f:facet>
+                        
                         <h:panelGrid columns="1" style="width:100%" >
                             <h:commandLink action="#{auctionBean.goToAuctionPage()}">
                                 <p:graphicImage height="200px" width="200px" value="./resources/img/#{a.url_image}"/>
@@ -25,16 +35,12 @@ and open the template in the editor.
                                                              target="#{auctionBean.auction}" /> 
                             </h:commandLink>
                             <h:outputText value="#{a.due_date}" style="font-weight:bold">
-                            <f:converter converterId="dueDateConverter" />
-                        </h:outputText>
+                                <f:converter converterId="dueDateConverter" />
+                            </h:outputText>
                             <h:outputText value="#{a.actual_price}" style="font-weight:bold">
                                 <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
                             </h:outputText>
                             <h:outputText value="Venditore #{dbmanager.findUsernameById(a.user_id)}"/>
-
-
-
-
                         </h:panelGrid>
                     </p:panel>
 

@@ -12,120 +12,40 @@
     </h:head>
     <h:body>
         <div id="header">
-            <ui:insert name="img" >
+            <ui:insert name="header" >
                 <ui:include src="/template/common/headerImg.xhtml">
                 </ui:include>
             </ui:insert>
-            <h:form>
-                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                <p:commandButton action="#{adminBean.goToSellsData()}"  value="Dati vendite"/>
-                <p:commandButton action="#{adminBean.goToOpenAuctions()}"  value="Aste aperte"/>
-                <p:commandButton action="#{authBean.InvalidateUser()}"  value="Logout"/>
-            </h:form>
+            <ui:insert name="menu" >
+                <ui:include src="/template/common/adminMenu.xhtml">
+                </ui:include>
+            </ui:insert>
         </div>
         <div id="content">
             <h:form>
-            <div id="left-container">
-                <div class="left-box" >
-                    
-                        <h:panelGrid columns="2">
-                            <p:panel header="Export All Data">
-                                <h:commandLink>
-                                    <p:graphicImage value="./resources/img/excel.png" />
-                                    <p:dataExporter type="xls" target="tbl" fileName="sells" />
-                                </h:commandLink>
-
-                                <h:commandLink>
-                                    <p:graphicImage value="./resources/img/pdf.png" />
-                                    <p:dataExporter type="pdf" target="tbl" fileName="sells"/>
-                                </h:commandLink>
-
-                                <h:commandLink>
-                                    <p:graphicImage value="./resources/img/csv.png" />
-                                    <p:dataExporter type="csv" target="tbl" fileName="sells" />
-                                </h:commandLink>
-
-                                <h:commandLink>
-                                    <p:graphicImage value="./resources/img/xml.png" />
-                                    <p:dataExporter type="xml" target="tbl" fileName="sells" />
-                                </h:commandLink>
-                            </p:panel>
-
-                            <p:panel header="Export Page Data">
-                                <h:commandLink>
-                                    <p:graphicImage value="./resources/img/excel.png" />
-                                    <p:dataExporter type="xls" target="tbl" fileName="sells" pageOnly="true"/>
-                                </h:commandLink>
-
-                                <h:commandLink>
-                                    <p:graphicImage value="./resources/img/pdf.png" />
-                                    <p:dataExporter type="pdf" target="tbl" fileName="sells" pageOnly="true"/>
-                                </h:commandLink>
-
-                                <h:commandLink>
-                                    <p:graphicImage value="./resources/img/csv.png" />
-                                    <p:dataExporter type="csv" target="tbl" fileName="sells" pageOnly="true"/>
-                                </h:commandLink>
-
-                                <h:commandLink>
-                                    <p:graphicImage value="./resources/img/xml.png" />
-                                    <p:dataExporter type="xml" target="tbl" fileName="sells" pageOnly="true"/>
-                                </h:commandLink>
-                            </p:panel>
-                        </h:panelGrid>
-
-                    
+                <div id="left-container">
+                    <div class="left-box" >
+                        
+                        <ui:insert name="epd" >
+                            <ui:include src="/template/common/exportPageData.xhtml">
+                            </ui:include>
+                        </ui:insert>
+                        <ui:insert name="ead" >
+                            <ui:include src="/template/common/exportAllData.xhtml">
+                            </ui:include>
+                        </ui:insert>                        
+                        
+                    </div>
                 </div>
-            </div>
 
-            <div id="right-container">
-                <div class="right-box">
-
-                    <p:dataTable id="tbl" var="sell" value="#{adminBean.sells}" paginator="true" rows="10">
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="ID Asta" />
-                            </f:facet>
-                            <h:outputText value="#{sell.auction_id}" />
-                        </p:column>
-
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="Venditore" />
-                            </f:facet>
-                            <h:outputText value="#{sell.seller_id}-#{dbmanager.findUsernameById(sell.seller_id)}"/>
-                        </p:column>
-
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="Compratore" />
-                            </f:facet>
-                            <h:outputText value="#{sell.buyer_id}-#{dbmanager.findUsernameById(sell.buyer_id)}"/>
-                        </p:column>
-
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="Prezzo finale" />
-                            </f:facet>
-                            <h:outputText value="#{sell.final_price+sell.tax}" >
-                                <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
-                                </h:outputText>
-                        </p:column>
-
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="Tasse" />
-                            </f:facet>
-                            <h:outputText value="#{sell.tax}" >
-                                 <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
-                                </h:outputText>
-                        </p:column>
-                    </p:dataTable>
-
-
-
+                <div id="right-container">
+                    <div class="right-box">
+                           <ui:insert name="sellTab" >
+                            <ui:include src="/template/common/sellTab.xhtml">
+                            </ui:include>
+                        </ui:insert> 
+                    </div>
                 </div>
-            </div>
 
             </h:form>
         </div>

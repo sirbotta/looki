@@ -2,42 +2,38 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://java.sun.com/jsf/core">
-    <f:event listener="#{authBean.isAdmin}" type="preRenderView" />
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>Admin page</title>
+        <title>Welcome</title> 
         <link rel="stylesheet" type="text/css" href="./resources/css/style.css"/>
+        <link href="./resources/css/jquery.countdown.css" rel="stylesheet" type="text/css" />
+        
+        <script type="text/javascript" src="./resources/js/jquery.countdown.js"></script>
+        <script type="text/javascript" src="./resources/js/script.js"></script>
     </h:head>
     <h:body>
         <div id="header">
-            <ui:insert name="img" >
+            <ui:insert name="header" >
                 <ui:include src="/template/common/headerImg.xhtml">
                 </ui:include>
             </ui:insert>
-            <h:form>
-                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                <p:commandButton action="#{adminBean.goToSellsData()}"  value="Dati vendite"/>
-                <p:commandButton action="#{adminBean.goToOpenAuctions()}"  value="Aste aperte"/>
-                <p:commandButton action="#{authBean.InvalidateUser()}"  value="Logout"/>
-            </h:form>
+            <ui:insert name="menu" >
+                <ui:include src="/template/common/adminMenu.xhtml">
+                </ui:include>
+            </ui:insert>
         </div>
         <div id="content">
             <div id="left-container">
-                <div class="left-box" >
-
+                <div class="left-box" >                  
                 </div>
             </div>
-
             <div id="right-container">
                 <div class="right-box">
-
-
+                
                 </div>
             </div>
-
-
         </div>
     </h:body>
 </html>

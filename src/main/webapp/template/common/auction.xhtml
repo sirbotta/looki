@@ -8,7 +8,8 @@ and open the template in the editor.
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
     <body>        
         <ui:composition>
             <h:form>
@@ -38,8 +39,8 @@ and open the template in the editor.
                         </p:column>
                         <p:column>
                             <h:outputText id="pr" value="#{auctionBean.auction.actual_price}">
-                                 <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
-                                </h:outputText>
+                                <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
+                            </h:outputText>
                         </p:column>
                     </p:row>
 
@@ -49,8 +50,8 @@ and open the template in the editor.
                         </p:column>
                         <p:column>
                             <h:outputText id="minIncr" value="#{auctionBean.auction.min_increment}">
-                                 <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
-                                </h:outputText>
+                                <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
+                            </h:outputText>
                         </p:column>
                     </p:row>
 
@@ -59,13 +60,15 @@ and open the template in the editor.
                             <h:outputLabel for="scad" value="Scade tra" />  
                         </p:column>
                         <p:column>
-                            <h:outputText id="scad" class="timer" value="#{auctionBean.auction.due_date}"/>
+                            <h:outputText id="scad" class="timer" value="#{auctionBean.auction.due_date}">
+                                <f:converter converterId="dueDateConverter" />
+                            </h:outputText>>
                         </p:column>
                     </p:row>
 
                     <p:row>
                         <p:column>
-                            <h:outputLabel for="vend" value="Descrizione" />  
+                            <h:outputLabel for="vend" value="Venditore" />  
                         </p:column>
                         <p:column>
                             <h:outputText id="vend" value="#{dbmanager.findUsernameById(auctionBean.auction.user_id)}"/>
@@ -82,23 +85,26 @@ and open the template in the editor.
                         </p:column>
                     </p:row>
 
-                    <p:row>
-                        <p:column>
-                            <h:outputLabel for="rilancio" value="Rilancia" />  
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="rilancio" value="#{auctionBean.min_increment}"/>
-                        </p:column>
-                    </p:row>
-
-
-                    <f:facet name="footer">
+                    <c:if test="#{!authBean.user.username.equals(
+                                  dbmanager.findUsernameById(auctionBean.auction.user_id)
+                                  )}">
                         <p:row>
-                            <p:column colspan="2">
-                                <p:commandButton ajax="false" value="Rilancia!" action="#{auctionBean.goToConfirmBid()}"/> 
+                            <p:column>
+                                <h:outputLabel for="rilancio" value="Rilancia" />  
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="rilancio" value="#{auctionBean.min_increment}"/>
                             </p:column>
                         </p:row>
-                    </f:facet>  
+
+                        <f:facet name="footer">
+                            <p:row>
+                                <p:column colspan="2">
+                                    <p:commandButton ajax="false" value="Rilancia!" action="#{auctionBean.goToConfirmBid()}"/> 
+                                </p:column>
+                            </p:row>
+                        </f:facet>  
+                    </c:if>
                 </p:panelGrid>
             </h:form>
         </ui:composition>

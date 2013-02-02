@@ -8,18 +8,28 @@ and open the template in the editor.
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
     <body>        
         <ui:composition>
+
             <h:form>
                 <p:menubar>  
                     <p:menuitem ajax="false" value="Home" action="landingPage" />  
                     <p:menuitem ajax="false" value="Le mie aste" action="#{searchBean.goToMyAuctions()}" />  
                     <p:menuitem ajax="false" value="Le mie puntate" action="#{searchBean.goToMyBids()}" />   
-                    <p:menuitem ajax="false" value="Login" action="forceLoginPage" />
-                    <p:menuitem ajax="false" value="Logout" action="#{authBean.InvalidateUser()}" />
+                    <c:if test="#{authBean.checkUser()}">
+                        <p:menuitem ajax="false" value="Logout" action="#{authBean.InvalidateUser()}" />
+                    </c:if>
+                    <c:if test="#{!authBean.checkUser()}">
+                        <p:menuitem ajax="false" value="Login" action="forceLoginPage" />
+                    </c:if>
+
                 </p:menubar> 
             </h:form>
+            <c:if test="#{authBean.checkUser()}">
+                <h:outputText value="Benvenuto #{authBean.user.username}!" style="float:right; margin-right:50px;"/>
+            </c:if>
         </ui:composition>
     </body>
 </html>

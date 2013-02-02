@@ -22,7 +22,9 @@ and open the template in the editor.
                     </h:outputText>
 
                     <h:outputLabel for="timer" value="Scade tra" />  
-                    <h:outputText id="timer" value="#{auctionBean.auction.due_date}"/>
+                    <h:outputText id="timer" value="#{auctionBean.auction.due_date}">
+                        <f:converter converterId="dueDateConverter" />
+                    </h:outputText>
 
                     <h:outputLabel for="myBid" value="Offri " />  
                     <h:outputText id="myBid" value="#{auctionBean.min_increment}">

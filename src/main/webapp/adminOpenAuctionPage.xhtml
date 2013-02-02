@@ -12,138 +12,39 @@
     </h:head>
     <h:body>
         <div id="header">
-            <ui:insert name="img" >
+            <ui:insert name="header" >
                 <ui:include src="/template/common/headerImg.xhtml">
                 </ui:include>
             </ui:insert>
-            <h:form>
-                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                <p:commandButton action="#{adminBean.goToSellsData()}"  value="Dati vendite"/>
-                <p:commandButton action="#{adminBean.goToOpenAuctions()}"  value="Aste aperte"/>
-                <p:commandButton action="#{authBean.InvalidateUser()}"  value="Logout"/>
-            </h:form>
+            <ui:insert name="menu" >
+                <ui:include src="/template/common/adminMenu.xhtml">
+                </ui:include>
+            </ui:insert>
         </div>
         <div id="content">
-            <div id="left-container">
-                <div class="left-box" >
+            <h:form>
 
-
-
+                <div id="left-container">
+                    <div class="left-box" >
+                        <ui:insert name="jl" >
+                            <ui:include src="/template/common/jobsList.xhtml">
+                            </ui:include>
+                        </ui:insert> 
+                    </div>
                 </div>
-            </div>
 
-            <div id="right-container">
-                <div class="right-box">
-                    <h:form>
-                        <p:dataTable id="dataTable" var="a" value="#{adminBean.auctions}"
-                                     paginator="true" rows="10"
-                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     rowsPerPageTemplate="5,10,15">
+                <div id="right-container">
+                    <div class="right-box">
 
-
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Descrizione" />
-                                </f:facet>
-                                <h:outputText value="#{a.description}" />
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Venditore" />
-                                </f:facet>
-                                <h:outputText value="#{dbmanager.findUsernameById(a.user_id)}" />
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Scadenza" />
-                                </f:facet>
-                                <h:outputText value="#{a.due_date}" >
-                                    <f:converter converterId="dueDateConverter" />
-                                </h:outputText>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Prezzo iniziale" />
-                                </f:facet>
-                                <h:outputText value="#{a.initial_price}"  >
-                                    <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
-                                </h:outputText>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Prezzo attuale" />
-                                </f:facet>
-                                <h:outputText value="#{a.actual_price}" >
-                                    <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
-                                </h:outputText>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Incremento" />
-                                </f:facet>
-                                <h:outputText value="#{a.min_increment}" >
-                                    <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
-                                </h:outputText>
-                            </p:column>
-
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Vincitore attuale" />
-                                </f:facet>
-                                <h:outputText value="#{dbmanager.findUsernameById(a.winner_id)}" />
-                            </p:column>
+                        <ui:insert name="auctionTab" >
+                            <ui:include src="/template/common/auctionTab.xhtml">
+                            </ui:include>
+                        </ui:insert> 
 
 
-
-                            <p:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Storico" />
-                                </f:facet>
-                                <h:commandLink action="#{adminBean.killAuction()}" value="Termina">
-
-                                    <f:setPropertyActionListener value="#{a}" 
-                                                                 target="#{adminBean.auction}" /> 
-
-                                </h:commandLink>
-                            </p:column>
-
-                        </p:dataTable>
-
-                    </h:form>
-
-                    <f:event listener="#{scheduler.fill_list}" type="preRenderView" />
-
-                    <p:dataTable value="#{scheduler.quartzJobList}" var="quartz">
-
-                        <p:column>
-                            <!-- column header -->
-                            <f:facet name="header">Job Name</f:facet>
-                            <!-- row record -->
-                            #{quartz.jobName}
-                        </p:column>
-
-                        <p:column>
-                            <f:facet name="header">Job Group</f:facet>
-                            #{quartz.jobGroup}
-                        </p:column>
-
-                        <p:column>
-                            <f:facet name="header">Next Fire Time</f:facet>
-                            <h:outputText value="#{quartz.nextFireTime}">
-                                <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" />
-                            </h:outputText>
-                        </p:column>
-
-                    </p:dataTable>
+                    </div>
                 </div>
-            </div>
-
-
+            </h:form>
         </div>
     </h:body>
 </html>

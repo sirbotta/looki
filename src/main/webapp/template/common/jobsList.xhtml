@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <body>        
+        <ui:composition>
+           <f:event listener="#{scheduler.fill_list}" type="preRenderView" />
+                    <p:dataTable value="#{scheduler.quartzJobList}" var="quartz">
+                        
+                        <p:column>
+                            <!-- column header -->
+                            <f:facet name="header">Job Name</f:facet>
+                            <!-- row record -->
+                            #{quartz.jobName}
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">Job Group</f:facet>
+                            #{quartz.jobGroup}
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">Next Fire Time</f:facet>
+                            <h:outputText value="#{quartz.nextFireTime}">
+                                <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" />
+                            </h:outputText>
+                        </p:column>
+
+                    </p:dataTable>
+        </ui:composition>
+    </body>
+</html>
