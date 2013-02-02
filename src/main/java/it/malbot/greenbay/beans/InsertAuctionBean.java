@@ -5,14 +5,23 @@
 package it.malbot.greenbay.beans;
 
 import it.malbot.greenbay.model.Auction;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.mail.MessagingException;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 import org.quartz.SchedulerException;
 
 /**
@@ -39,8 +48,16 @@ public class InsertAuctionBean implements Serializable{
     private String description, url_image="na.jpg";
     private double initial_price, min_increment, delivery_price;
     private Timestamp due_date;
+    private UploadedFile file;
+    private final String relativeWebPath = "/resources/img/";
 
     public String submitNewAuction() throws SchedulerException, MessagingException, SQLException {
+        
+        if(file!=null)
+        {
+            url_image=file.getFileName();
+        }
+        
         //creato un'asta
         Auction a = new Auction();
         //setto i parametri
@@ -52,7 +69,9 @@ public class InsertAuctionBean implements Serializable{
         a.setMin_increment(min_increment);
         a.setActual_price(initial_price);
         a.setDelivery_price(delivery_price);
-
+        
+        
+        //traduzione dal codice alla due_date in timestamp
         if (getDue_code().equals("1minute")) {
             due_date = new Timestamp(new Date().getTime() + minuteInMillis);
         } else if (getDue_code().equals("1day")) {
@@ -75,7 +94,6 @@ public class InsertAuctionBean implements Serializable{
         {
         
         //creo un job che chiuderà l'asta
-        //@TODO job da scrivere correttamente
         scheduler.closeAuctionAt(closeDate, key);
 
         //mando una mail di conferma
@@ -88,6 +106,66 @@ public class InsertAuctionBean implements Serializable{
         
         return "landingPage";
     }
+    
+    
+    
+    /////// parte di upload
+    //per actionlistener
+    public void handleFileUpload(FileUploadEvent event) {
+        setFile(event.getFile());
+        if (file != null) {
+            try {
+                FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "SUCCESSO", "Immagine " + file.getFileName()
+                    + " caricata correttamente");
+            FacesContext.getCurrentInstance().addMessage(null, fm);
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+                copyFile(file.getFileName(), file.getInputstream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
+           
+
+        } else {
+            FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_WARN, "ATTENZIONE", "Nessuna imagine valida. "
+                    + "L'asta verrà creata con una immagine di Defoult");
+            FacesContext.getCurrentInstance().addMessage(null, fm);
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+            
+        }
+        
+    }
+    
+    
+    public void copyFile(String fileName, InputStream in) {
+        try {
+
+            String destination = FacesContext.getCurrentInstance().getExternalContext().getRealPath(relativeWebPath);
+            // write the inputStream to a FileOutputStream
+            OutputStream out = new FileOutputStream(new File(destination+"/" + fileName));
+
+            int read = 0;
+            byte[] bytes = new byte[1024];
+
+            while ((read = in.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
+            }
+
+            in.close();
+            out.flush();
+            out.close();
+
+            System.out.println("New file created at "+destination);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    
+    
+    
+   ///////////
+    
    
 
     /**
@@ -228,5 +306,19 @@ public class InsertAuctionBean implements Serializable{
      */
     public void setDue_code(String due_code) {
         this.due_code = due_code;
+    }
+
+    /**
+     * @return the file
+     */
+    public UploadedFile getFile() {
+        return file;
+    }
+
+    /**
+     * @param file the file to set
+     */
+    public void setFile(UploadedFile file) {
+        this.file = file;
     }
 }
