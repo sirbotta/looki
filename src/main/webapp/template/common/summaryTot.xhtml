@@ -44,10 +44,16 @@ and open the template in the editor.
                 <h:outputText id="ap" value="#{searchBean.auctions_to_pay}" >
                     <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
                 </h:outputText>
+                
+                <h:outputLabel for="ss" value="Spese di spedizione" />  
+                <h:outputText id="ss" value="#{searchBean.deliveries_to_pay}" >
+                    <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
+                </h:outputText>
+
 
                 <f:facet name="footer"> 
                     <h:outputLabel for="totu" value="TOT " />  
-                    <h:outputText id="totu" value="#{searchBean.taxes_to_pay+searchBean.auctions_to_pay}" style="color:red">
+                    <h:outputText id="totu" value="#{searchBean.taxes_to_pay+searchBean.auctions_to_pay+searchBean.deliveries_to_pay}" style="color:red">
                         <f:convertNumber currencySymbol="€" type="currency"  minFractionDigits="2" maxFractionDigits="2"/>
                     </h:outputText>
                 </f:facet>  

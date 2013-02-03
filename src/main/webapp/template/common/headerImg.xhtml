@@ -7,15 +7,24 @@ and open the template in the editor.
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
     <body>
-        
+
         <ui:composition>
             <h:form id="logo">
                 <p:commandLink ajax="false"  action="landingPage">
                     <p:graphicImage value="/resources/img/logoS.png" style="width: 180px"/>
                 </p:commandLink>
             </h:form>
+
+            <c:if test="#{authBean.checkUser()}">
+                <h:form style="padding-bottom: 10px; padding-left: 10px;">
+                    <h:outputText value="Benvenuto, #{authBean.user.username}(#{authBean.user.mail})! " />
+                    <p:commandLink ajax="false" value="Esci" action="#{authBean.InvalidateUser()}" />
+                </h:form>
+            </c:if>
+
         </ui:composition>
 
     </body>

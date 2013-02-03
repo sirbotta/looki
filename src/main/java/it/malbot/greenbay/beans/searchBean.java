@@ -191,7 +191,7 @@ public class searchBean implements Serializable {
             taxes_to_pay = 0;
             earn_from_auctions = 0;
             auctions_to_pay = 0;
-            deliveries_to_pay = 0;
+            setDeliveries_to_pay(0);
 
             sell_result = dbmanager.getSellBySeller_id(authBean.getUser().getId());
             for (Sell s : sell_result) {
@@ -203,7 +203,7 @@ public class searchBean implements Serializable {
             setResult(dbmanager.getAuctionClosedByBidderId(authBean.getUser().getId()));
             for (Auction a : result0) {
                 auctions_to_pay += a.getActual_price();
-                deliveries_to_pay += a.getDelivery_price();
+                setDeliveries_to_pay(getDeliveries_to_pay() + a.getDelivery_price());
             }
 
 
@@ -330,5 +330,19 @@ public class searchBean implements Serializable {
      */
     public void setSell_result(List<Sell> sell_result) {
         this.sell_result = sell_result;
+    }
+
+    /**
+     * @return the deliveries_to_pay
+     */
+    public double getDeliveries_to_pay() {
+        return deliveries_to_pay;
+    }
+
+    /**
+     * @param deliveries_to_pay the deliveries_to_pay to set
+     */
+    public void setDeliveries_to_pay(double deliveries_to_pay) {
+        this.deliveries_to_pay = deliveries_to_pay;
     }
 }
