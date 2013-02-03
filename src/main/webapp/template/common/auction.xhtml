@@ -17,7 +17,7 @@ and open the template in the editor.
                     <p:row>
                         <p:column colspan="2">
                             <p:lightBox>
-                                <h:outputLink value="/resources/img/#{auctionBean.auction.url_image}" title="#{auctionBean.auction.description}">  
+                                <h:outputLink value="/GREENbay/resources/img/#{auctionBean.auction.url_image}" title="#{auctionBean.auction.description}">  
                                     <p:graphicImage height="200px" width="200px" value="/resources/img/#{auctionBean.auction.url_image}"/> 
                                 </h:outputLink>  
                             </p:lightBox>
@@ -84,26 +84,27 @@ and open the template in the editor.
                             <h:outputText id="vincAt" value="#{dbmanager.findUsernameById(auctionBean.auction.winner_id)}"/>
                         </p:column>
                     </p:row>
-
-                    <c:if test="#{!authBean.user.username.equals(
-                                  dbmanager.findUsernameById(auctionBean.auction.user_id)
-                                  )}">
-                        <p:row>
-                            <p:column>
-                                <h:outputLabel for="rilancio" value="Rilancia" />  
-                            </p:column>
-                            <p:column>
-                                <p:inputText id="rilancio" value="#{auctionBean.min_increment}"/>
-                            </p:column>
-                        </p:row>
-
-                        <f:facet name="footer">
+                    <c:if test="#{!auctionBean.auction.closed}">
+                        <c:if test="#{!authBean.user.username.equals(
+                                      dbmanager.findUsernameById(auctionBean.auction.user_id)
+                                      )}">
                             <p:row>
-                                <p:column colspan="2">
-                                    <p:commandButton ajax="false" value="Rilancia!" action="#{auctionBean.goToConfirmBid()}"/> 
+                                <p:column>
+                                    <h:outputLabel for="rilancio" value="Rilancia" />  
+                                </p:column>
+                                <p:column>
+                                    <p:inputText id="rilancio" value="#{auctionBean.min_increment}"/>
                                 </p:column>
                             </p:row>
-                        </f:facet>  
+
+                            <f:facet name="footer">
+                                <p:row>
+                                    <p:column colspan="2">
+                                        <p:commandButton ajax="false" value="Rilancia!" action="#{auctionBean.goToConfirmBid()}"/> 
+                                    </p:column>
+                                </p:row>
+                            </f:facet>  
+                        </c:if>
                     </c:if>
                 </p:panelGrid>
             </h:form>

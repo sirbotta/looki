@@ -15,6 +15,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.mail.MessagingException;
 
 /**
  *
@@ -33,6 +34,8 @@ public class AuctionBean implements Serializable {
     private DbmanagerBean dbmanager;
     @ManagedProperty(value = "#{authBean}")
     private AuthBean authBean;
+    @ManagedProperty(value = "#{mailer}")
+    private MailerBean mailer;
     //@ManagedProperty(value = "#{param.auction_id}")
     private int auction_id;
     //@ManagedProperty(value = "#{param.bid_value}")
@@ -75,7 +78,7 @@ public class AuctionBean implements Serializable {
         //controllo che sia la bid sia superiore o uguale al minimo imposto
         Double minimo = roundToCent(auction.getMin_increment() + auction.getActual_price());
         if (min_increment >= minimo) {
-            return "/base/secure/confirmPage";
+            return "/base/confirmPage";
         } else {
 
             FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_WARN, "ATTENZIONE", "Offerta troppo bassa");
@@ -85,7 +88,7 @@ public class AuctionBean implements Serializable {
         }
     }
 
-    public String confirmBid() throws SQLException {
+    public String confirmBid() throws SQLException, MessagingException {
 
         bid_value = min_increment;
 
@@ -140,6 +143,19 @@ public class AuctionBean implements Serializable {
                         auction.setWinner_id(u.getId());
                         auction.setActual_price(bid_value);
                         setMin_increment(roundToCent(auction.getMin_increment() + bid_value));
+
+                        //notifico l'ex winner
+                        User exwinner = dbmanager.findUser(bestAuction_Bid.getUser_id());
+                        mailer.SendMail(exwinner.getMail(),
+                                "Stai perdendo l' Asta " + auction_id + "-" + auction.getDescription(),
+                                "La tua offerta è stata superata da " + u.getUsername());
+
+                        //notifico il venditore
+                        User seller = dbmanager.findUser(auction.getUser_id());
+                        mailer.SendMail(seller.getMail(),
+                                "Hai una puntata per l'asta " + auction_id + "-" + auction.getDescription(),
+                                "Ha una offerta di " + bid_value + "€ effettutata da " + u.getUsername());
+
                         FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "INFO", "Complimenti attualmente sei il vincitore");
                         FacesContext.getCurrentInstance().addMessage(null, fm);
                         FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
@@ -163,6 +179,13 @@ public class AuctionBean implements Serializable {
                         auction.setWinner_id(bestAuction_Bid.getUser_id());
                         auction.setActual_price(bid_value);
                         setMin_increment(roundToCent(auction.getMin_increment() + bid_value));
+
+                        //notifico il venditore
+                        User seller = dbmanager.findUser(auction.getUser_id());
+                        mailer.SendMail(seller.getMail(),
+                                "Hai una puntata per l'asta " + auction_id + "-" + auction.getDescription(),
+                                "Il vincitore attuale ha rilanciato di  " + bid_value);
+
                         FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_WARN, "ATTENZIONE", "Non sei il miglior Offerente");
                         FacesContext.getCurrentInstance().addMessage(null, fm);
                         FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
@@ -192,6 +215,12 @@ public class AuctionBean implements Serializable {
                     auction.setWinner_id(u.getId());
                     auction.setActual_price(bid_value);
                     setMin_increment(roundToCent(auction.getMin_increment() + bid_value));
+
+                    //notifico il venditore
+                    User seller = dbmanager.findUser(auction.getUser_id());
+                    mailer.SendMail(seller.getMail(),
+                            "Hai una puntata per l'asta " + auction_id + "-" + auction.getDescription(),
+                            "Ha una offerta di " + bid_value + "€ effettutata da " + u.getUsername());
 
                     FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "INFO", "Complimenti attualmente sei il vincitore");
                     FacesContext.getCurrentInstance().addMessage(null, fm);
@@ -299,5 +328,12 @@ public class AuctionBean implements Serializable {
      */
     public void setAuction_bid_story(List<Auction_Bid> auction_bid_story) {
         this.auction_bid_story = auction_bid_story;
+    }
+
+    /**
+     * @param mailer the mailer to set
+     */
+    public void setMailer(MailerBean mailer) {
+        this.mailer = mailer;
     }
 }

@@ -42,7 +42,7 @@ public class InsertAuctionBean implements Serializable {
     private AuthBean authBean;
     private int category_id;
     private String due_code;
-    final long minuteInMillis = 60L * 1000L;
+    final long minuteInMillis = 3L *60L * 1000L;
     final long dayInMillis = 24L * 60L * 60L * 1000L;
     final long weekInMillis = 7L * 24L * 60L * 60L * 1000L;
     private String description, url_image = "na.jpg";
@@ -73,7 +73,7 @@ public class InsertAuctionBean implements Serializable {
 
 
         //traduzione dal codice alla due_date in timestamp
-        if (getDue_code().equals("1minute")) {
+        if (getDue_code().equals("3minute")) {
             due_date = new Timestamp(new Date().getTime() + minuteInMillis);
         } else if (getDue_code().equals("1day")) {
             due_date = new Timestamp(new Date().getTime() + dayInMillis);
@@ -99,7 +99,7 @@ public class InsertAuctionBean implements Serializable {
             //mando una mail di conferma
             mailer.SendMail(authBean.getUser().getMail(),
                     "Asta creata con successo",
-                    "L'asta " + description + " scadrà il"
+                    "L'asta " + description + " scadrà il "
                     + due_date.toString());
 
         }

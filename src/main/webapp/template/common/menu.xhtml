@@ -15,7 +15,7 @@ and open the template in the editor.
 
             <h:form>
                 <p:menubar>  
-                    <p:menuitem ajax="false" value="Home" action="landingPage" />  
+                    <p:menuitem ajax="false" value="Home" action="/base/landingPage" />  
                     <p:menuitem ajax="false" value="Riepilogo" action="#{searchBean.goToMySummary()}" />
                     <p:menuitem ajax="false" value="Le mie aste" action="#{searchBean.goToMyAuctions()}" />  
                     <p:menuitem ajax="false" value="Le mie puntate" action="#{searchBean.goToMyBids()}" />   
@@ -23,7 +23,7 @@ and open the template in the editor.
                         <p:menuitem ajax="false" value="Logout" action="#{authBean.InvalidateUser()}" />
                     </c:if>
                     <c:if test="#{!authBean.checkUser()}">
-                        <p:menuitem ajax="false" value="Login" action="forceLoginPage" />
+                        <p:menuitem ajax="false" value="Login" action="/base/forceLoginPage" />
                     </c:if>
 
                 </p:menubar> 

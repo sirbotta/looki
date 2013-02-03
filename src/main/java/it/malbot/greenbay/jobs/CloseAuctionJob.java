@@ -67,9 +67,9 @@ public class CloseAuctionJob implements Job, Serializable {
                 //prelevo il prezzo finale
                 price = auction.getActual_price();
                 //calcolo le tasse
-                tax = (price / 100) * 1.25;
-                //tolgo le tasse dal guadagno
-                price = price - tax;
+                
+                tax = roundToHalf((price / 100) * 1.25);
+                
 
                 sell.setFinal_price(price);
                 sell.setTax(tax);
@@ -88,13 +88,13 @@ public class CloseAuctionJob implements Job, Serializable {
                 //notifico al venditore
                 mailer.SendMail(user.getMail(),
                         "Asta " + auction.getId() + " conclusa",
-                        "L'asta " + auction.getDescription() + "si è conclusa.");
+                        "L'asta " + auction.getDescription() + " si è conclusa.");
 
                 if (winner != null) {
                     //notifico al winner se esiste
                     mailer.SendMail(winner.getMail(),
                             "Asta " + auction.getId() + " conclusa",
-                            "L'asta " + auction.getDescription() + "si è conclusa, sei il vincitore!");
+                            "L'asta " + auction.getDescription() + " si è conclusa, sei il vincitore!");
                 }
             } catch (MessagingException ex) {
                 Logger.getLogger(CloseAuctionJob.class.getName()).log(Level.SEVERE, null, ex);
@@ -113,5 +113,9 @@ public class CloseAuctionJob implements Job, Serializable {
 
 
 
+    }
+
+    public static double roundToHalf(double x) {
+        return (double) (Math.ceil(x * 2) / 2);
     }
 }

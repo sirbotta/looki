@@ -56,6 +56,8 @@ public class AdminBean implements Serializable {
 
         //trovo il seller
         User seller = dbmanager.findUser(auction.getUser_id());
+        //trovo il winner
+        User winner = dbmanager.findUser(auction.getWinner_id());
 
         //notifico al venditore
         mailer.SendMail(seller.getMail(),
@@ -63,7 +65,14 @@ public class AdminBean implements Serializable {
                 "L'asta " + auction.getId() + " è stata chiusa, ci scusiamo per il disagio. Non saranno applicate Tasse a seguito"
                 + " dell'intervento.");
 
-        //TODO da fare la spedizione a tutti i bidder
+        //notifico al winner se esiste
+        if (winner != null) {
+            mailer.SendMail(winner.getMail(),
+                    "Asta " + auction.getId() + " CANCELLATA by ADMIN " + authBean.getUsername(),
+                    "L'asta " + auction.getId() + " è stata chiusa, ci scusiamo per il disagio. Non saranno applicate Tasse a seguito"
+                    + " dell'intervento.");
+        }
+
         FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, "INFO", "Asta " + auction.getId() + " terminata con successo");
         FacesContext.getCurrentInstance().addMessage(null, fm);
         FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);

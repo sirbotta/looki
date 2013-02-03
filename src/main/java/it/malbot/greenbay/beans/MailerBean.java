@@ -51,7 +51,7 @@ public class MailerBean implements Serializable {
         props.put("mail.smtp.auth", "true");
         props.put("mail.debug", "true");
 
-        session = Session.getDefaultInstance(props, new Authenticator() {
+        session = Session.getInstance(props, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
             }
