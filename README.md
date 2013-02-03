@@ -7,8 +7,42 @@ Progetto 2 di Programmazione WEB 2012/2013
 
 Introduzione
 ------------
-Il progetto simula una semplice casa d'aste per prodotti agricoli con funzioni ispirati alla nota casa di aste E-bay.
-L'utente quindi può creare e partecipare alle aste in corso sia come venditore che come acquirente.
+Il progetto simula una semplice casa d'aste per prodotti agricoli con funzioni ispirati alla nota casa di aste E-bay.  
+L'utente quindi può creare e partecipare alle aste in corso sia come venditore che come acquirente.  
+Tutta l'applicazione è stata realizzata in modo modulare seguendo il Pattern MVC.  
+L'app è validata in ogni input sia per il controllo dell'inserimento e sia per evitare SQL Injection.  
+La sicurezza è gestita tramite dei semplici filtri che limitano gli utenti non loggati e bloccano le sezioni 
+ADMIN agli estranei.  
+Il tutto è implementato ispirandosi al mondo enterprise con injection di bean grazie al supporto CDI di Glassfish, riducendo 
+al minimo lo spreco di connessioni e la propagazione di oggetti istanziati dai vari utenti.  
+Anche se non era richiesto abbiamo voluto andare oltre al semplice progetto didattico e abbiamo implementato soluzioni 
+per un possibile progetto adatto ad un ambito commerciale impiegando tecnologie e modelli usti in ambiti Enterprise.  
+Per questo l'utilizzo di tomcat e connessioni jdbc normali non erano sufficenti e siamo dovuti migrare verso webserver 
+più potenti.
+
+Installazione
+-------------
+Il sistema necessita di preparare in anticipo il Database e il jdbc connection pool.  
+Per il db sono presenti dentro it.malbot.greenbay.model il dbSchema e un seed con dei dati di prova 
+già sotto forma di query sql.  
+Per motivi tecnici le aste non scadranno correttamente visto che quartz non ha i job attivi di chiusura.
+
+In ogni caso create un DB su derby chiamato greenbay con user *green* e password *bay*  
+Create poi su glassfish tramite il pannello admin una connection pool al db usando i driver derby (non derby 40)  
+I parametri necessari sono:
+Servername: localhost  
+databaseName: greenbay    
+ConnectionAttribute: ;create=true  
+User: green   
+Password: bay  
+PortNumber: 1527  
+
+Una volta finito create una risorsa jdbc che punti al pool appena creato.  
+Chiamatela jdbc/greenbay.  
+Ora l'app può collegarsi liberamente al db tramite alle pool ottimizzate di glassfish.
+
+Per comodità l'app è in formato MAVEN e dopo la prima compilazione scaricherà in modo automatico tutte le dipendenze 
+necessarie per l'avvio della webapp.
 
 
 Tecnologie
@@ -71,29 +105,7 @@ Ruolo: controllo atutenticazione parti private utenti
 Ruolo: controllo atutenticazione parti admin
 
 
-Installazione
--------------
-Il sistema necessita di preparare in anticipo il Database e il jdbc connection pool.  
-Per il db sono presenti dentro it.malbot.greenbay.model il dbSchema e un seed con dei dati di prova 
-già sotto forma di query sql.  
-Per motivi tecnici le aste non scadranno correttamente visto che quartz non ha i job attivi di chiusura.
 
-In ogni caso create un DB su derby chiamato greenbay con user *green* e password *bay*  
-Create poi su glassfish tramite il pannello admin una connection pool al db usando i driver derby (non derby 40)  
-I parametri necessari sono:
-Servername: localhost  
-databaseName: greenbay    
-ConnectionAttribute: ;create=true  
-User: green   
-Password: bay  
-PortNumber: 1527  
-
-Una volta finito create una risorsa jdbc che punti al pool appena creato.  
-Chiamatela jdbc/greenbay.  
-Ora l'app può collegarsi liberamente al db tramite alle pool ottimizzate di glassfish.
-
-Per comodità l'app è in formato MAVEN e dopo la prima compilazione scaricherà in modo automatico tutte le dipendenze 
-necessarie per l'avvio della webapp.
 
 
 
