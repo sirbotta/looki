@@ -38,7 +38,7 @@ public class EmailValidator implements Validator {
 
         if (!password.equals(confirmEmail)) {
             uiInputConfirmEmail.setValid(false);
-            throw new ValidatorException(new FacesMessage(
+            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, "ATTENZIONE",
                     "Password must match confirm password."));
         }
 

@@ -50,7 +50,8 @@ public class MailerBean implements Serializable {
         props.setProperty("mail.smtp.socketFactory.port", "465");
         props.put("mail.smtp.auth", "true");
         props.put("mail.debug", "true");
-
+        
+        //se trova la sessione attiva la sovrascrive
         session = Session.getInstance(props, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
@@ -70,6 +71,7 @@ public class MailerBean implements Serializable {
         msg.setSubject(subject);
         msg.setText(text);
         msg.setSentDate(new Date());
+        //invio tramite il metodo statico Transport.send che si aggancia alla sessione tramite il messaggio
         Transport.send(msg);
     }
 }

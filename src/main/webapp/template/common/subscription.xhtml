@@ -16,36 +16,41 @@ and open the template in the editor.
                     <f:facet name="header"> 
                         Iscrizione
                     </f:facet>  
-                    
+
                     <h:outputLabel for="username" value="Username "/>  
                     <p:inputText id="username" value="#{subscriptionBean.username}" required="true" label="Username" />  
-                    
+
                     <h:outputLabel for="password" value="Password "  />  
                     <p:password value="#{subscriptionBean.password}" id="password" required="true" label="Password">
                         <f:validator validatorId="passwordValidator"/>
                         <f:attribute name="confirmPassword" value="#{confirmPassword}"/>
                     </p:password>
-                    
+
                     <h:outputLabel for="cnfPwd" value="Conferma Password "  />  
                     <p:password id="cnfPwd" required="true"
-                                   binding="#{confirmPassword}"
-                                   requiredMessage="Please enter confirm password" />
-                    
+                                binding="#{confirmPassword}"
+                                requiredMessage="Please enter confirm password" />
+
                     <h:outputLabel for="email" value="Email"  />  
                     <p:inputText value="#{subscriptionBean.mail}" id="email" required="true" label="Email">
+                        <f:validateRegex 
+                            pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
                         <f:validator validatorId="emailValidator"/>
                         <f:attribute name="confirmEmail" value="#{confirmEmail}"/>
                     </p:inputText>
-                    
+
                     <h:outputLabel for="cnfEmail" value="Conferma Mail "  />  
                     <p:inputText id="cnfEmail" required="true"
-                                   binding="#{confirmEmail}"
-                                   requiredMessage="Please enter confirm email" />
-                    
+                                 binding="#{confirmEmail}"
+                                 requiredMessage="Please enter confirm email" >
+                        <f:validateRegex 
+                            pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                    </p:inputText>
+
                     <h:outputLabel for="address" value="Indirizzo " />  
                     <p:inputText id="address" value="#{subscriptionBean.address}" required="true" label="Username" /> 
 
-                
+
 
                     <f:facet name="footer"> 
                         <p:commandButton ajax="false" value="Confirm" action="#{subscriptionBean.Subscript}"/>  
